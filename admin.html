@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lista de Cadastros</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #fafafa;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background: #eee;
+    }
+    tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lista de Cadastros</h1>
+  <table id="tabelaDados">
+    <thead id="cabecalho"></thead>
+    <tbody id="corpo"></tbody>
+  </table>
+
+  <script>
+    const url = "https://script.google.com/macros/s/AKfycbyrU90a4idziaeNP9IHdpDSTfgXUVXZYdgKWggxWK-grGd_5eOO6KOrjMbSb9l1QDuPbQ/exec?listar=true";
+
+    async function carregarDados() {
+      try {
+        const resposta = await fetch(url);
+        const dados = await resposta.json();
+
+        if (dados.length === 0) {
+          document.getElementById("tabelaDados").innerHTML = "<tr><td>Nenhum dado encontrado.</td></tr>";
+          return;
+        }
+
+        // Monta cabeçalho
+        const colunas = Object.keys(dados[0]);
+        const thead = document.getElementById("cabecalho");
+        thead.innerHTML = "<tr>" + colunas.map(c => `<th>${c}</th>`).join("") + "</tr>";
+
+        // Monta corpo
+        const tbody = document.getElementById("corpo");
+        tbody.innerHTML = dados.map(linha =>
+          "<tr>" + colunas.map(c => `<td>${linha[c] ?? ""}</td>`).join("") + "</tr>"
+        ).join("");
+      } catch (erro) {
+        console.error("Erro ao carregar dados:", erro);
+        document.body.innerHTML += "<p>Erro ao carregar dados da planilha.</p>";
+      }
+    }
+
+    carregarDados();
+  </script>
+</body>
+</html>
