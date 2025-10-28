@@ -2,144 +2,141 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Cadastro e Ficha de Anamnese</title>
+  <title>Ficha de Cadastros e Anamnese</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #f0f4f8, #dfe9f3);
+      font-family: "Poppins", sans-serif;
       margin: 0;
-      padding: 40px 15px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-    }
-
-    form {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      padding: 30px 35px;
-      max-width: 800px;
-      width: 100%;
+      padding: 30px 15px;
+      background: #f3f4f6;
+      color: #333;
     }
 
     h2 {
       text-align: center;
-      color: #2c3e50;
-      margin-bottom: 10px;
+      color: #1e293b;
+      margin-bottom: 25px;
       font-weight: 600;
-      font-size: 1.8em;
     }
 
     h3 {
-      color: #007bff;
-      margin-top: 30px;
-      font-weight: 500;
-      border-left: 4px solid #007bff;
+      color: #1e293b;
+      margin-top: 25px;
+      border-left: 4px solid #2563eb;
       padding-left: 10px;
+      font-weight: 600;
+    }
+
+    form {
+      max-width: 750px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
     }
 
     label {
       display: block;
       margin-top: 15px;
       font-weight: 500;
-      color: #333;
+      color: #334155;
     }
 
-    input, textarea, select {
+    input, select, textarea {
       width: 100%;
-      padding: 10px 12px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
+      padding: 12px 14px;
+      margin-top: 5px;
+      border: 1.5px solid #d1d5db;
       border-radius: 8px;
-      font-size: 14px;
-      transition: 0.2s;
+      box-sizing: border-box;
+      font-size: 15px;
       background: #fafafa;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    input:focus, textarea:focus {
-      border-color: #007bff;
+    input:focus, textarea:focus, select:focus {
       outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
       background: #fff;
-      box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 60px;
+    textarea { resize: vertical; min-height: 70px; }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 14px;
+      width: 100%;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
+
+    button:hover { background: #1d4ed8; }
+
+    #mensagem {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .sucesso { color: #166534; background: #dcfce7; border: 1px solid #bbf7d0; }
+    .erro { color: #991b1b; background: #fee2e2; border: 1px solid #fecaca; }
+    .carregando { color: #854d0e; background: #fef9c3; border: 1px solid #fde68a; }
 
     .checkbox-text {
-      background: #f9f9f9;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 10px;
-      margin-top: 10px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 12px;
+      border-radius: 8px;
       font-size: 13px;
-      color: #555;
-      line-height: 1.5;
+      margin-top: 10px;
+      line-height: 1.6;
+      color: #475569;
     }
 
     .checkbox-line {
+      margin-top: 12px;
       display: flex;
       align-items: center;
-      margin-top: 10px;
-      font-size: 14px;
     }
 
     .checkbox-line input {
       width: auto;
       margin-right: 8px;
-      accent-color: #007bff;
+      transform: scale(1.2);
+      accent-color: #2563eb;
     }
 
-    button {
-      display: block;
-      width: 100%;
-      background: linear-gradient(90deg, #007bff, #00bfff);
-      color: white;
+    hr {
+      margin: 30px 0;
       border: none;
-      padding: 14px;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 30px;
-      transition: all 0.3s ease;
+      border-top: 1px solid #e2e8f0;
     }
-
-    button:hover {
-      background: linear-gradient(90deg, #0062cc, #0099cc);
-      transform: scale(1.02);
-    }
-
-    #mensagem {
-      text-align: center;
-      margin-top: 20px;
-      font-weight: 500;
-      border-radius: 8px;
-      padding: 12px;
-    }
-
-    .sucesso { color: #155724; background: #d4edda; border: 1px solid #c3e6cb; }
-    .erro { color: #721c24; background: #f8d7da; border: 1px solid #f5c6cb; }
-    .carregando { color: #856404; background: #fff3cd; border: 1px solid #ffeaa7; }
 
     @media (max-width: 600px) {
       form { padding: 20px; }
-      h2 { font-size: 1.5em; }
+      body { padding: 20px 10px; }
     }
   </style>
 </head>
 
 <body>
-  <form id="formCadastro">
-    <h2>Cadastro e Ficha de Anamnese</h2>
+  <h2>Cadastro e Ficha de Anamnese</h2>
 
+  <form id="formCadastro">
     <h3>Informações Cadastrais</h3>
 
     <label for="email">E-mail</label>
@@ -165,6 +162,8 @@
 
     <label for="endereco">Endereço (rua, bairro, número e complemento)</label>
     <input type="text" id="endereco" name="endereco" required>
+
+    <hr>
 
     <h3>Ficha de Anamnese</h3>
 
@@ -193,12 +192,30 @@
       Fico ciente que se não entrei, estou na lista de espera.
     </div>
     <div class="checkbox-line">
-      <input type="checkbox" id="cienteVagas" name="cienteVagas" required> <label for="cienteVagas">Ciente</label>
+      <input type="checkbox" id="cienteVagas" name="cienteVagas" required> 
+      <label for="cienteVagas">Ciente</label>
     </div>
 
     <label>7 - Termo de Responsabilidade</label>
     <div class="checkbox-text">
-      Declaro estar ciente da natureza dos trabalhos e das condições de participação.
+      Venho de livre e espontânea vontade solicitar o ingresso à sessão com Ayahuasca no Instituto Xamânico Mistérios da Jibóia.
+      Declaro que estou ciente da natureza desses trabalhos, da preparação exigida, dos detalhes do ritual e da condição expressa
+      de permanecer no local até o fechamento dos trabalhos. Também estou ciente da proibição de portar ou usar quaisquer
+      substâncias proscritas pela lei penal brasileira, bebidas alcoólicas, armas brancas ou de fogo.
+      Comprometo-me a obedecer a todas as determinações do dirigente dos trabalhos.
+      No local, antes do início do ritual, estou ciente de que preencherei uma ficha de anamnese detalhada.
+
+      Referente ao meu histórico de saúde, atesto que:
+      • Não possuo restrição médica para participação.
+      • Não fui diagnosticado(a) com qualquer distúrbio psicológico ou psiquiátrico.
+      • Não sou portador(a) de esquizofrenia ou apresentei qualquer episódio esquizoide.
+      • Nunca fui internado(a) em nenhuma instituição psiquiátrica.
+      • Não fui diagnosticado(a) como autista ou portador de síndrome de Asperger.
+      • Não sou portador(a) de imunodeficiência ou de doença preexistente crônica ou grave.
+      • Não faço abuso de nenhum tipo de substância que cause dependência química.
+      • Não estou em tratamento com drogas de tarja preta e/ou descritas.
+      • Não pratico automedicação.
+      • Não tomei vacina de qualquer tipo nos últimos 20 dias.
     </div>
     <div class="checkbox-line">
       <input type="checkbox" id="termoResponsabilidade" name="termoResponsabilidade" required> 
@@ -207,15 +224,26 @@
 
     <label>8 - Autorização de uso dos meus dados</label>
     <div class="checkbox-text">
-      Autorizo o uso dos meus dados para contato sobre cerimônias e atividades oferecidas.
+      Estou ciente e autorizo o uso dos meus dados para que o Instituto entre em contato comigo sobre as cerimônias e atividades oferecidas.
+      Meus dados serão tratados com sigilo e usados apenas para fins relacionados. Lembro que posso solicitar a exclusão da lista a qualquer momento.
     </div>
     <div class="checkbox-line">
-      <input type="checkbox" id="usoDados" name="usoDados" required> <label for="usoDados">Ciente</label>
+      <input type="checkbox" id="usoDados" name="usoDados" required> 
+      <label for="usoDados">Ciente</label>
     </div>
 
-    <label>9 - Política de Cancelamento e Devolução</label>
+    <label>9 - Termo de Cancelamento e Política de Devolução</label>
     <div class="checkbox-text">
-      Declaro estar ciente da política de cancelamento e devolução, conforme descrito.
+      Ao confirmar sua inscrição na cerimônia, o participante declara estar ciente e de acordo com a política de cancelamento e devolução descrita abaixo:
+      Após a confirmação da inscrição e realização do pagamento, não haverá devolução de valores sob nenhuma circunstância,
+      inclusive em casos de desistência ou impossibilidade de comparecimento.
+      No entanto, oferecemos a possibilidade de utilizar o valor pago como crédito para uma próxima cerimônia, desde que:
+      - O aviso seja feito com antecedência mínima de 48h antes do evento;
+      - Seja realizada uma solicitação formal de remarcação (por WhatsApp ou e-mail);
+      - Haja disponibilidade de vagas na nova data;
+      - O crédito seja utilizado em até 3 meses após a data original;
+      - O crédito é intransferível e pessoal.
+      ⚠ Em casos de desistência no dia da cerimônia ou durante sua realização, não haverá reembolso ou crédito.
     </div>
     <div class="checkbox-line">
       <input type="checkbox" id="politicaCancelamento" name="politicaCancelamento" required> 
@@ -224,7 +252,9 @@
 
     <label>Declaração Final</label>
     <div class="checkbox-text">
-      Declaro que todas as informações fornecidas são verdadeiras e completas.
+      Ao enviar este formulário, declaro que as informações fornecidas são verdadeiras e completas, que foram preenchidas por mim,
+      e que fui informado(a) sobre os aspectos legais e de saúde envolvidos na cerimônia. Entendo que o Instituto segue práticas
+      seguras e não se responsabiliza por quaisquer complicações que possam surgir devido a condições de saúde não declaradas ou desconhecidas.
     </div>
     <div class="checkbox-line">
       <input type="checkbox" id="declaracaoFinal" name="declaracaoFinal" required> 
@@ -242,11 +272,25 @@
     document.getElementById("formCadastro").addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      // Validação manual para evitar campos vazios
+      const form = e.target;
+      const campos = form.querySelectorAll("input[required], textarea[required], select[required]");
+      for (const campo of campos) {
+        if (
+          (campo.type === "checkbox" && !campo.checked) ||
+          (!campo.value.trim() && campo.type !== "checkbox")
+        ) {
+          campo.focus();
+          alert("⚠️ Por favor, preencha todos os campos obrigatórios e marque todos os termos.");
+          return;
+        }
+      }
+
       const mensagemDiv = document.getElementById("mensagem");
       mensagemDiv.textContent = "Verificando duplicidade...";
       mensagemDiv.className = "carregando";
 
-      const btn = e.target.querySelector('button[type=\"submit\"]');
+      const btn = e.target.querySelector('button[type="submit"]');
       btn.disabled = true;
 
       const cpf = document.getElementById("cpf").value.trim();
