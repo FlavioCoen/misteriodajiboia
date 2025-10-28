@@ -3,72 +3,193 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lista de Cadastros</title>
+  <title>Painel de Cadastros</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #fafafa;
+    /* ======== ESTILO GERAL ======== */
+    :root {
+      --cor-primaria: #4a6cf7;
+      --cor-fundo: #f5f7fb;
+      --cor-texto: #333;
+      --borda: #e0e0e0;
+      --fonte: "Inter", "Segoe UI", Arial, sans-serif;
     }
+
+    body {
+      margin: 0;
+      font-family: var(--fonte);
+      background: var(--cor-fundo);
+      color: var(--cor-texto);
+    }
+
     h1 {
       text-align: center;
-      color: #333;
+      color: var(--cor-primaria);
+      margin-top: 20px;
+      font-size: 1.8rem;
     }
+
+    /* ======== LOGIN ======== */
+    #login {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #4a6cf7, #6b8bff);
+      color: white;
+    }
+
+    #login input {
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      margin-top: 10px;
+      width: 250px;
+      font-size: 1rem;
+    }
+
+    #login button {
+      margin-top: 15px;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      background: white;
+      color: #4a6cf7;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #login button:hover {
+      background: #e0e0e0;
+    }
+
+    /* ======== TABELA ======== */
+    #tabelaContainer {
+      max-width: 95%;
+      margin: 20px auto 50px auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      overflow-x: auto;
+      padding: 20px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      font-size: 0.95rem;
     }
+
     th, td {
-      padding: 10px;
-      border: 1px solid #ccc;
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--borda);
       text-align: left;
     }
+
     th {
-      background: #eee;
+      background: #f2f4f8;
+      font-weight: 600;
+      color: #555;
     }
-    tr:nth-child(even) {
-      background: #f9f9f9;
+
+    tr:hover {
+      background: #f9fbff;
+    }
+
+    @media (max-width: 768px) {
+      table {
+        font-size: 0.85rem;
+      }
+      h1 {
+        font-size: 1.4rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      th, td {
+        padding: 8px 6px;
+      }
+    }
+
+    /* ======== LOADING ======== */
+    #loading {
+      text-align: center;
+      color: #666;
+      margin-top: 30px;
+      font-size: 1.1rem;
     }
   </style>
 </head>
 <body>
-  <h1>Lista de Cadastros</h1>
-  <table id="tabelaDados">
-    <thead id="cabecalho"></thead>
-    <tbody id="corpo"></tbody>
-  </table>
+
+  <!-- ======== TELA DE LOGIN ======== -->
+  <div id="login">
+    <h2>🔒 Acesso Restrito</h2>
+    <input type="password" id="senha" placeholder="Digite a senha de acesso" />
+    <button onclick="verificarSenha()">Entrar</button>
+    <p id="erro" style="color: #ffd6d6; display:none;">Senha incorreta. Tente novamente.</p>
+  </div>
+
+  <!-- ======== CONTEÚDO PROTEGIDO ======== -->
+  <div id="conteudo" style="display:none;">
+    <h1>Lista de Cadastros</h1>
+    <div id="tabelaContainer">
+      <div id="loading">Carregando dados...</div>
+      <table id="tabelaDados" style="display:none;">
+        <thead id="cabecalho"></thead>
+        <tbody id="corpo"></tbody>
+      </table>
+    </div>
+  </div>
 
   <script>
+    const senhaCorreta = "Fmc180518";
     const url = "https://opensheet.elk.sh/1KbxCvGFkf1dgyrxx-BHkutNN8ANztGKDiCJ0GhrwCK4/Página1";
+
+    function verificarSenha() {
+      const senha = document.getElementById("senha").value.trim();
+      if (senha === senhaCorreta) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("conteudo").style.display = "block";
+        carregarDados();
+      } else {
+        const erro = document.getElementById("erro");
+        erro.style.display = "block";
+        setTimeout(() => erro.style.display = "none", 2500);
+      }
+    }
 
     async function carregarDados() {
       try {
         const resposta = await fetch(url);
         const dados = await resposta.json();
 
-        if (dados.length === 0) {
-          document.getElementById("tabelaDados").innerHTML = "<tr><td>Nenhum dado encontrado.</td></tr>";
-          return;
-        }
+        // Ordenar alfabeticamente pelo nome (coluna "NomeCompleto" ou similar)
+        dados.sort((a, b) => {
+          const nomeA = (a.NomeCompleto || a.Nome || "").toLowerCase();
+          const nomeB = (b.NomeCompleto || b.Nome || "").toLowerCase();
+          return nomeA.localeCompare(nomeB);
+        });
 
-        // Monta cabeçalho
         const colunas = Object.keys(dados[0]);
         const thead = document.getElementById("cabecalho");
         thead.innerHTML = "<tr>" + colunas.map(c => `<th>${c}</th>`).join("") + "</tr>";
 
-        // Monta corpo
         const tbody = document.getElementById("corpo");
         tbody.innerHTML = dados.map(linha =>
           "<tr>" + colunas.map(c => `<td>${linha[c] ?? ""}</td>`).join("") + "</tr>"
         ).join("");
+
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("tabelaDados").style.display = "table";
+
       } catch (erro) {
         console.error("Erro ao carregar dados:", erro);
-        document.body.innerHTML += "<p>Erro ao carregar dados da planilha.</p>";
+        document.getElementById("loading").innerText = "Erro ao carregar dados da planilha.";
       }
     }
-
-    carregarDados();
   </script>
 </body>
 </html>
