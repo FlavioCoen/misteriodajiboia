@@ -3,211 +3,185 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Buscar cadastro por CPF</title>
+  <title>Consulta de Cadastro</title>
   <style>
-    :root{
-      --primary:#4a6cf7;
-      --bg:#f5f7fb;
-      --card:#fff;
-      --text:#222;
-      --muted:#666;
-      --radius:12px;
+    :root {
+      --primary: #4a6cf7;
+      --bg: #f5f7fb;
+      --card: #fff;
+      --text: #222;
+      --muted: #666;
+      --radius: 12px;
       --font: "Inter", "Segoe UI", Arial, sans-serif;
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:var(--font);
-      background:linear-gradient(180deg,#f5f7fb 0%, #eef2ff 100%);
-      color:var(--text);
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: linear-gradient(180deg, #f5f7fb 0%, #eef2ff 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
-    .card{
-      width:100%;
-      max-width:760px;
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:0 10px 30px rgba(22,44,120,0.08);
-      padding:26px;
+
+    .card {
+      width: 100%;
+      max-width: 500px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(22,44,120,0.08);
+      padding: 26px;
     }
-    h1{margin:0 0 6px 0; color:var(--primary); font-size:1.5rem}
-    p.lead{margin:0 0 18px 0; color:var(--muted)}
-    .row{display:flex; gap:12px; flex-wrap:wrap}
-    input[type="text"]{
-      flex:1 1 220px;
-      padding:12px 14px;
-      border-radius:10px;
-      border:1px solid #e6e9f2;
-      font-size:1rem;
+
+    h1 {
+      text-align: center;
+      color: var(--primary);
+      font-size: 1.6rem;
+      margin-bottom: 8px;
     }
-    button{
-      background:var(--primary);
-      color:white;
-      border:none;
-      padding:12px 16px;
-      border-radius:10px;
-      cursor:pointer;
-      font-weight:600;
+
+    p.lead {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 0;
+      margin-bottom: 20px;
     }
-    button:active{transform:translateY(1px)}
-    .result{
-      margin-top:18px;
-      padding:16px;
-      border-radius:10px;
-      background:#fbfdff;
-      border:1px dashed #e6eefc;
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #e6e9f2;
+      font-size: 1rem;
+      margin-bottom: 12px;
     }
-    .error{color:#b00020; font-weight:600}
-    .nome{font-size:1.25rem; font-weight:700; margin-bottom:6px}
-    .sub{color:var(--muted)}
-    @media (max-width:520px){
-      .row{flex-direction:column}
-      button{width:100%}
+
+    button {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    button:active { transform: translateY(1px); }
+
+    .result {
+      margin-top: 20px;
+      background: #fbfdff;
+      border: 1px dashed #e6eefc;
+      border-radius: 10px;
+      padding: 16px;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .error { color: #b00020; font-weight: 600; text-align: center; }
+
+    .saudacao {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .info-item {
+      margin: 6px 0;
+      font-size: 0.95rem;
+    }
+
+    .label {
+      font-weight: 600;
+      color: #444;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 20px; }
+      h1 { font-size: 1.4rem; }
     }
   </style>
 </head>
 <body>
-  <div class="card" role="main" aria-labelledby="titulo">
-    <h1 id="titulo">Acessar Cadastro por CPF</h1>
-    <p class="lead">Digite seu CPF (somente números ou com pontos/traço) para ver seu cadastro.</p>
+  <div class="card">
+    <h1>Consulta de Cadastro</h1>
+    <p class="lead">Digite seu CPF para visualizar suas informações.</p>
 
-    <div class="row" style="align-items:center">
-      <input id="cpfInput" type="text" placeholder="Ex.: 123.456.789-00 ou 12345678900" inputmode="numeric" />
-      <button id="btnBuscar" onclick="buscar()">🔎 Buscar</button>
-    </div>
+    <input id="cpfInput" type="text" placeholder="Ex.: 123.456.789-00" inputmode="numeric" />
+    <button onclick="buscar()">🔎 Buscar</button>
 
-    <div id="status" class="result" style="display:none;"></div>
-
-    <p style="margin-top:12px; color:var(--muted); font-size:0.9rem">
-      Observação: se a planilha tiver coluna <em>Sexo</em> / <em>Gênero</em>, usaremos ela para definir "Bem Vindo(a)". Caso contrário, aplicamos uma heurística simples no primeiro nome (nomes terminados em <strong>'a'</strong> → feminino). A heurística pode errar para alguns nomes.
-    </p>
+    <div id="resultado" class="result"></div>
   </div>
 
   <script>
-    // URL do OpenSheet (planilha pública em leitura)
     const SHEET_URL = "https://opensheet.elk.sh/1KbxCvGFkf1dgyrxx-BHkutNN8ANztGKDiCJ0GhrwCK4/Página1";
 
-    // normaliza CPF: remove tudo que não for dígito
     function normalizeCPF(cpf) {
       return (cpf || "").toString().replace(/\D/g, "");
     }
 
-    // heurística simples para detectar gênero pelo primeiro nome
-    function guessGenderFromName(nomeCompleto) {
-      if (!nomeCompleto) return null;
-      const first = nomeCompleto.trim().split(/\s+/)[0] || "";
-      const lastChar = first.slice(-1).toLowerCase();
-      // regra simples: nomes terminados em 'a' => feminino; terminações comuns 'o' => masculino
-      if (lastChar === "a") return "F";
-      if (lastChar === "o") return "M";
-      // fallback neutro assume masculino (menos provável de errar em PT, mas não garantido)
-      return "M";
-    }
-
-    // tenta extrair gênero a partir de uma linha (obj): procura colunas possíveis
-    function detectGenderFromRow(rowObj) {
-      const keys = Object.keys(rowObj || {});
-      const genderKeys = keys.filter(k => /^(sexo|genero|género|gender)$/i.test(k));
-      for (const k of genderKeys) {
-        const v = (rowObj[k] || "").toString().trim().toLowerCase();
-        if (!v) continue;
-        if (v.startsWith("m")) return "M";
-        if (v.startsWith("f")) return "F";
-        // aceitar "masculino", "feminino", "m", "f", etc.
-      }
-      return null;
-    }
-
-    // formata nome (NomeCompleto) para exibição (retira espaços extras)
-    function formatName(nome) {
-      if (!nome) return "";
-      return nome.trim().replace(/\s+/g, " ");
+    function guessGender(nome) {
+      if (!nome) return "M";
+      const first = nome.trim().split(/\s+/)[0].toLowerCase();
+      return first.endsWith("a") ? "F" : "M";
     }
 
     async function buscar() {
-      const statusEl = document.getElementById("status");
-      statusEl.style.display = "block";
-      statusEl.innerHTML = "Buscando...";
-
       const cpfRaw = document.getElementById("cpfInput").value;
       const cpf = normalizeCPF(cpfRaw);
+      const res = document.getElementById("resultado");
+      res.style.display = "block";
+      res.innerHTML = "Buscando...";
 
       if (!cpf || cpf.length < 8) {
-        statusEl.innerHTML = `<div class="error">CPF inválido. Digite o CPF corretamente.</div>`;
+        res.innerHTML = `<div class="error">⚠️ CPF inválido. Digite corretamente.</div>`;
         return;
       }
 
       try {
-        const resp = await fetch(SHEET_URL, {cache: "no-store"});
-        if (!resp.ok) {
-          statusEl.innerHTML = `<div class="error">Erro ao acessar a planilha (status ${resp.status}).</div>`;
-          return;
-        }
+        const resposta = await fetch(SHEET_URL);
+        const dados = await resposta.json();
 
-        const dados = await resp.json();
-        if (!Array.isArray(dados) || dados.length === 0) {
-          statusEl.innerHTML = `<div class="error">Nenhum dado encontrado na planilha.</div>`;
-          return;
-        }
-
-        // procurar correspondência de CPF: vamos normalizar os CPFs da planilha também
-        const encontrado = dados.find(row => {
-          // possíveis nomes de coluna que armazenam CPF: "CPF", "Cpf", "cpf"
-          // procuramos qualquer campo cujo valor, sem não-dígitos, case-insensitive, bata com o cpf fornecido
-          return Object.values(row).some(val => {
-            if (val === null || val === undefined) return false;
-            const v = String(val);
-            const vDigits = v.replace(/\D/g, "");
-            return vDigits === cpf;
-          });
-        });
+        const encontrado = dados.find(linha =>
+          Object.values(linha).some(v => (v || "").toString().replace(/\D/g, "") === cpf)
+        );
 
         if (!encontrado) {
-          statusEl.innerHTML = `<div class="error">CPF não encontrado. Verifique e tente novamente.</div>`;
+          res.innerHTML = `<div class="error">❌ CPF não encontrado. Verifique e tente novamente.</div>`;
           return;
         }
 
-        // pega nome: procura por chaves comuns
-        const nomeChaves = ["NomeCompleto","Nome","nomeCompleto","nome","FullName","Nome completo"];
-        let nome = "";
-        for (const k of nomeChaves) {
-          if (encontrado[k]) { nome = encontrado[k]; break; }
-          // também tentar key insensível
-          const keyLower = Object.keys(encontrado).find(x => x.toLowerCase() === k.toLowerCase());
-          if (keyLower) { nome = encontrado[keyLower]; break; }
-        }
-        nome = formatName(nome || encontrado[Object.keys(encontrado)[0]] || "");
+        const nome = (encontrado.NomeCompleto || encontrado.Nome || "").trim();
+        const genero = guessGender(nome);
+        const saudacao = genero === "F" ? "Seja Bem-Vinda" : "Seja Bem-Vindo";
 
-        // detecta genero
-        let genero = detectGenderFromRow(encontrado);
-        if (!genero) {
-          genero = guessGenderFromName(nome); // heurística
-        }
-
-        // montar saudação
-        const saudacao = genero === "F" ? "Seja Bem Vinda" : "Seja Bem Vindo";
-        // se quiser adicionar (a) automaticamente: "Seja Bem Vind(o/a)" — aqui usamos o correto conforme gênero detectado
-
-        // exibir resultado
-        const html = `
-          <div class="nome">Olá, ${nome} — <span style="color:var(--primary)">${saudacao}!</span></div>
-          <div class="sub"><strong>CPF:</strong> ${cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}</div>
-          <div style="margin-top:10px;">
-            <strong>Informações encontradas na planilha:</strong>
-            <pre style="white-space:pre-wrap;margin:8px 0 0 0;background:#fcfdff;padding:10px;border-radius:8px;border:1px solid #eef6ff;">
-${Object.entries(encontrado).map(([k,v]) => `${k}: ${v}`).join("\n")}
-            </pre>
-          </div>
+        res.innerHTML = `
+          <div class="saudacao">Olá, ${nome}! ${saudacao} 🙏</div>
+          <div class="info-item"><span class="label">Email:</span> ${encontrado.Email || ""}</div>
+          <div class="info-item"><span class="label">Nome Completo:</span> ${nome}</div>
+          <div class="info-item"><span class="label">CPF:</span> ${encontrado.CPF || ""}</div>
+          <div class="info-item"><span class="label">RG:</span> ${encontrado.RG || ""}</div>
+          <div class="info-item"><span class="label">Local Nascimento:</span> ${encontrado.LocalNascimento || ""}</div>
+          <div class="info-item"><span class="label">Data Nascimento:</span> ${encontrado.DataNascimento || ""}</div>
+          <div class="info-item"><span class="label">Telefone:</span> ${encontrado.Telefone || ""}</div>
+          <div class="info-item"><span class="label">Endereço:</span> ${encontrado.Endereco || ""}</div>
         `;
-        statusEl.innerHTML = html;
-
-      } catch (err) {
-        console.error(err);
-        statusEl.innerHTML = `<div class="error">Erro ao buscar dados: ${err.message || err}</div>`;
+      } catch (erro) {
+        console.error(erro);
+        res.innerHTML = `<div class="error">⚠️ Erro ao buscar dados da planilha.</div>`;
       }
     }
   </script>
