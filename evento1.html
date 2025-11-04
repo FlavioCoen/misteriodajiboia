@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscrição no Evento1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-top: 30px;
+    }
+    .container {
+      max-width: 600px;
+      background: white;
+      margin: 30px auto;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 6px #ccc;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="tel"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      background: #007bff;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      margin-top: 15px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .hidden { display: none; }
+    .checkbox-line {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .checkbox-line input { margin-right: 8px; }
+    .mensagem {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .sucesso {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+    }
+    .erro {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Inscrição no Evento1</h2>
+
+  <div class="container">
+    <div id="login">
+      <label for="cpfLogin">Digite seu CPF para login</label>
+      <input type="text" id="cpfLogin" placeholder="000.000.000-00">
+      <button id="btnBuscar">Buscar Cadastro</button>
+      <div id="msgErro" class="mensagem erro hidden"></div>
+    </div>
+
+    <form id="formEvento" class="hidden">
+      <label>Nome completo</label>
+      <input type="text" id="nome" name="nome" readonly>
+
+      <label>CPF</label>
+      <input type="text" id="cpf" name="cpf" readonly>
+
+      <label>RG</label>
+      <input type="text" id="rg" name="rg" readonly>
+
+      <label>WhatsApp</label>
+      <input type="tel" id="telefone" name="telefone" readonly>
+
+      <div style="margin-top:20px;">
+        <p>
+          Este evento possui número limitado de vagas (8).<br>
+          Caso as vagas já estejam preenchidas, sua inscrição será colocada na lista de espera.
+        </p>
+        <div class="checkbox-line">
+          <input type="checkbox" id="termoCiencia" name="termoCiencia" required>
+          <label for="termoCiencia">Estou ciente e desejo me inscrever no evento.</label>
+        </div>
+        <div id="campoListaEspera" class="checkbox-line hidden">
+          <input type="checkbox" id="cienteListaEspera" name="cienteListaEspera">
+          <label for="cienteListaEspera">Estou ciente que estou na lista de espera.</label>
+        </div>
+      </div>
+
+      <button type="submit">Confirmar Inscrição</button>
+      <div id="mensagem" class="mensagem hidden"></div>
+    </form>
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwHTaZXuaK9XRuy7WLsXlYiF_XasL5e5sQFGdOksa1wpHA3rUbJ16cEUZH5-q12jHruTQ/exec";
+    const eventoNome = "Evento1"; // <- altere para Evento2, Evento3, etc.
+
+    const cpfLogin = document.getElementById("cpfLogin");
+    const btnBuscar = document.getElementById("btnBuscar");
+    const msgErro = document.getElementById("msgErro");
+    const formEvento = document.getElementById("formEvento");
+    const mensagem = document.getElementById("mensagem");
+
+    // === Buscar CPF ===
+    btnBuscar.addEventListener("click", async () => {
+      msgErro.classList.add("hidden");
+      const cpf = cpfLogin.value.replace(/\D/g, ""); // remove pontos e traços
+      if (!cpf) {
+        msgErro.textContent = "Digite um CPF válido.";
+        msgErro.classList.remove("hidden");
+        return;
+      }
+
+      try {
+        const resp = await fetch(`${scriptURL}?acao=evento&cpf=${cpf}`);
+        const data = await resp.json();
+
+        if (data.erro) {
+          msgErro.textContent = "CPF não encontrado. Cadastre-se primeiro.";
+          msgErro.classList.remove("hidden");
+          return;
+        }
+
+        // Preenche campos
+        document.getElementById("nome").value = data.nome;
+        document.getElementById("cpf").value = data.cpf;
+        document.getElementById("rg").value = data.rg;
+        document.getElementById("telefone").value = data.telefone;
+
+        document.getElementById("login").classList.add("hidden");
+        formEvento.classList.remove("hidden");
+
+      } catch (err) {
+        msgErro.textContent = "Erro ao buscar: " + err.message;
+        msgErro.classList.remove("hidden");
+      }
+    });
+
+    // === Enviar inscrição ===
+    formEvento.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      mensagem.classList.add("hidden");
+
+      const formData = new FormData(formEvento);
+      formData.append("acao", "evento");
+      formData.append("evento", eventoNome);
+
+      try {
+        const resp = await fetch(scriptURL, { method: "POST", body: formData });
+        const txt = await resp.text();
+
+        if (txt.includes("Lista de Espera")) {
+          document.getElementById("campoListaEspera").classList.remove("hidden");
+          if (!formData.get("cienteListaEspera")) {
+            mensagem.textContent = "⚠️ Vagas esgotadas. Marque o campo de ciência para confirmar entrada na lista de espera.";
+            mensagem.className = "mensagem erro";
+            mensagem.classList.remove("hidden");
+            return;
+          }
+        }
+
+        mensagem.textContent = txt;
+        mensagem.className = "mensagem sucesso";
+        mensagem.classList.remove("hidden");
+        formEvento.reset();
+
+      } catch (err) {
+        mensagem.textContent = "❌ Erro: " + err.message;
+        mensagem.className = "mensagem erro";
+        mensagem.classList.remove("hidden");
+      }
+    });
+  </script>
+
+</body>
+</html>
