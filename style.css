@@ -1,58 +1,86 @@
-/* RESET */
+/* RESET básico */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin:0;
+  padding:0;
+  box‑sizing:border-box;
 }
-
-/* CORPO GERAL */
 body {
-    font-family: "Poppins", sans-serif;
-    color: #fff;
-    overflow-x: hidden;
+  font‑family: "Poppins", sans‑serif;
+  color:#fff;
+  line-height:1.6;
 }
-
-/* SEÇÕES DE FUNDO */
+a {
+  text-decoration:none;
+  color:inherit;
+}
+.site‑header {
+  position:fixed;
+  top:0;
+  width:100%;
+  background: rgba(0,0,0,0.6);
+  z‑index:1000;
+}
+.nav {
+  display:flex;
+  justify-content:center;
+  padding:1rem;
+}
+.nav a {
+  margin:0 1rem;
+  font-weight:500;
+}
 .secao {
-    min-height: 100vh;
-    width: 100%;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 1rem;
+  width:100%;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background-size:cover;
+  background-position:center center;
+  position:relative;
+  padding:0 1rem;
+}
+.hero {
+  background-image: url('1.jpg');
+}
+#novos‑horizontes {
+  background-image: url('2.jpg');
+}
+.overlay {
+  background: rgba(0,0,0,0.5);
+  padding:2rem;
+  border-radius:10px;
+  max-width:900px;
+  text-align:center;
+}
+/* Textos dentro de overlay seções */
+.texto h2 {
+  margin-bottom:1rem;
+  font-size:2rem;
+}
+.texto p {
+  margin-bottom:1rem;
+}
+.texto h3 {
+  margin-top:1.5rem;
+  font-size:1.5rem;
+}
+/* Responsividade */
+@media (max‑width:768px) {
+  .overlay {
+    padding:1.5rem;
+  }
+  .texto h2 {
+    font-size:1.5rem;
+  }
+  .texto h3 {
+    font-size:1.2rem;
+  }
+  .nav {
+    flex-direction:column;
+  }
+  .nav a {
+    margin:0.5rem 0;
+  }
 }
 
-/* BLOCO DE TEXTO */
-.texto {
-    background: rgba(0, 0, 0, 0.55);
-    border-radius: 10px;
-    padding: 2rem;
-    max-width: 800px;
-    text-align: center;
-    line-height: 1.6;
-}
-
-/* TÍTULOS */
-h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-h2, h3 {
-    margin: 1rem 0;
-}
-
-/* RESPONSIVIDADE */
-@media (max-width: 768px) {
-    .texto {
-        padding: 1.5rem;
-    }
-    h1 {
-        font-size: 2rem;
-    }
-    h2 {
-        font-size: 1.5rem;
-    }
-}
