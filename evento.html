@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Inscrição no Evento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 20px; }
+    form {
+      max-width: 600px; margin: auto; background: white; padding: 20px;
+      border-radius: 8px; box-shadow: 0 0 5px #ccc;
+    }
+    label { font-weight: bold; display: block; margin-top: 15px; }
+    input[type="text"], button { width: 100%; padding: 10px; margin-top: 5px; }
+    button {
+      background: #007bff; color: white; border: none; cursor: pointer;
+      margin-top: 20px; border-radius: 5px;
+    }
+    button:hover { background: #0056b3; }
+    #mensagem { margin-top: 15px; padding: 10px; border-radius: 4px; }
+    .sucesso { background: #d4edda; border: 1px solid #c3e6cb; color: green; }
+    .erro { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+    .checkbox-line { display: flex; align-items: center; margin-top: 10px; }
+    .checkbox-line input { width: auto; margin-right: 8px; }
+    .checkbox-text {
+      font-size: 13px; background: #fafafa; border: 1px solid #ddd;
+      padding: 10px; border-radius: 5px; margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2 id="tituloEvento">Inscrição no Evento</h2>
+
+  <form id="formEvento">
+    <label for="cpf">Digite seu CPF para login</label>
+    <input type="text" id="cpf" name="cpf" placeholder="00000000000" required>
+
+    <button type="button" id="btnBuscar">Buscar Cadastro</button>
+
+    <div id="dadosUsuario" style="display:none;">
+      <hr>
+      <p><b>Nome:</b> <span id="nome"></span></p>
+      <p><b>CPF:</b> <span id="cpfMostrar"></span></p>
+      <p><b>RG:</b> <span id="rg"></span></p>
+      <p><b>WhatsApp:</b> <span id="telefone"></span></p>
+
+      <div class="checkbox-text">
+        A cerimônia tem vagas limitadas (8 participantes). Caso as vagas já estejam preenchidas,
+        você será automaticamente colocado na lista de espera e será avisado caso haja vaga.
+      </div>
+      <div class="checkbox-line">
+        <input type="checkbox" id="ciente" name="ciente" required>
+        <label for="ciente">Ciente e desejo me inscrever</label>
+      </div>
+
+      <div id="checkboxLista" style="display:none;">
+        <div class="checkbox-text">
+          ⚠ O número máximo de 8 participantes foi atingido.  
+          Ao continuar, você entrará na lista de espera.
+        </div>
+        <div class="checkbox-line">
+          <input type="checkbox" id="cienteLista" name="cienteLista">
+          <label for="cienteLista">Estou ciente e desejo entrar na lista de espera</label>
+        </div>
+      </div>
+
+      <button type="submit">Confirmar Inscrição</button>
+    </div>
+  </form>
+
+  <div id="mensagem"></div>
+
+  <script>
+    // === CONFIGURAÇÕES ===
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwHTaZXuaK9XRuy7WLsXlYiF_XasL5e5sQFGdOksa1wpHA3rUbJ16cEUZH5-q12jHruTQ/exec";
+
+    // Captura o nome do evento pela URL (?evento=Evento1)
+    const params = new URLSearchParams(window.location.search);
+    const evento = params.get("evento") || "Evento1";
+    document.getElementById("tituloEvento").textContent = `Inscrição no ${evento}`;
+
+    const btnBuscar = document.getElementById("btnBuscar");
+    const form = document.getElementById("formEvento");
+    const msg = document.getElementById("mensagem");
+
+    // === Buscar dados do cadastro base ===
+    btnBuscar.addEventListener("click", async () => {
+      const cpf = document.getElementById("cpf").value.trim();
+      if (!cpf) return alert("Digite o CPF");
+
+      msg.textContent = "Buscando dados...";
+      msg.className = "";
+
+      try {
+        const resp = await fetch(`${scriptURL}?cpf=${cpf}&acao=evento`);
+        const data = await resp.json();
+
+        if (data.erro) {
+          msg.textContent = "❌ CPF não encontrado no cadastro base.";
+          msg.className = "erro";
+          return;
+        }
+
+        document.getElementById("nome").textContent = data.nome;
+        document.getElementById("cpfMostrar").textContent = data.cpf;
+        document.getElementById("rg").textContent = data.rg;
+        document.getElementById("telefone").textContent = data.telefone;
+        document.getElementById("dadosUsuario").style.display = "block";
+        msg.textContent = "";
+      } catch (e) {
+        msg.textContent = "Erro ao buscar: " + e.message;
+        msg.className = "erro";
+      }
+    });
+
+    // === Enviar inscrição ===
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      msg.textContent = "Enviando inscrição...";
+      msg.className = "";
+
+      const cpf = document.getElementById("cpf").value.trim();
+      const cienteLista = document.getElementById("cienteLista").checked ? "Sim" : "Não";
+
+      const formData = new FormData();
+      formData.append("cpf", cpf);
+      formData.append("evento", evento);
+      formData.append("cienteLista", cienteLista);
+
+      try {
+        const resp = await fetch(scriptURL + "?acao=evento", { method: "POST", body: formData });
+        const texto = await resp.text();
+
+        msg.textContent = texto;
+        msg.className = texto.includes("confirmada") ? "sucesso" : "erro";
+      } catch (e) {
+        msg.textContent = "Erro: " + e.message;
+        msg.className = "erro";
+      }
+    });
+  </script>
+</body>
+</html>
