@@ -1,0 +1,51 @@
+// === NOVA FUNÇÃO para listar inscritos por evento ===
+function doGet(e) {
+  const acao = e.parameter.acao;
+
+  // === busca de dados do participante ===
+  if (acao === "evento" && e.parameter.cpf) {
+    const dados = getCadastroPorCPF(e.parameter.cpf);
+    return ContentService.createTextOutput(
+      JSON.stringify(dados ? dados : { erro: true })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // === listar inscritos por evento ===
+  if (acao === "listar" && e.parameter.evento) {
+    const ss = SpreadsheetApp.openById(PLANILHA_ID);
+    const ws = ss.getSheetByName(e.parameter.evento);
+    if (!ws) {
+      return ContentService.createTextOutput(JSON.stringify([]))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    const dados = ws.getDataRange().getValues();
+    const inscritos = dados.slice(1).map(row => ({
+      data: row[0],
+      nome: row[1],
+      cpf: row[2],
+      rg: row[3],
+      telefone: row[4],
+      status: row[5]
+    }));
+
+    return ContentService.createTextOutput(JSON.stringify(inscritos))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // === mantém compatibilidade com o formulário original ===
+  const ss = SpreadsheetApp.openById(PLANILHA_ID);
+  const ws = ss.getSheetByName(SHEET_NAME);
+  const cpf = e.parameter.cpf;
+  if (cpf) {
+    const dados = ws.getDataRange().getValues();
+    const existe = dados.some(row => row[3] === cpf);
+    return ContentService
+      .createTextOutput(existe ? "DUPLICADO" : "OK")
+      .setMimeType(ContentService.MimeType.TEXT);
+  }
+
+  return ContentService
+    .createTextOutput("OK")
+    .setMimeType(ContentService.MimeType.TEXT);
+}
