@@ -2,155 +2,475 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Ficha de Cadastros e Anamnese</title>
+  <title>Cadastro - Instituto Xamânico Mistério da Jibóia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #f7f7f7; }
-    h2, h3 { color: #333; }
-    form {
-      max-width: 700px;
-      margin: auto;
-      background: white;
+    :root {
+      --primary: #2E8B57;
+      --primary-dark: #26734a;
+      --secondary: #8B4513;
+      --accent: #FFD700;
+      --text: #2C3E50;
+      --text-light: #7F8C8D;
+      --background: #F8F9FA;
+      --white: #FFFFFF;
+      --border: #E1E8ED;
+      --success: #27AE60;
+      --warning: #F39C12;
+      --error: #E74C3C;
+      --shadow: 0 4px 20px rgba(0,0,0,0.1);
+      --radius: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 5px #ccc;
     }
-    label { display: block; margin-top: 15px; font-weight: bold; }
-    input, select, textarea, button {
-      width: 100%; padding: 10px; margin-top: 5px;
-      border: 1px solid #ccc; border-radius: 4px;
-      box-sizing: border-box; font-size: 14px;
-    }
-    textarea { resize: vertical; min-height: 60px; }
-    button {
-      background: #007bff; color: white; cursor: pointer;
-      border: none; margin-top: 20px;
-    }
-    button:hover { background: #0056b3; }
 
-    /* Botão de voltar */
-    #btnVoltar {
-      display: none;
-      background: #28a745;
-      color: white;
-      border: none;
-      margin-top: 20px;
-      padding: 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-      font-size: 14px;
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
     }
-    #btnVoltar:hover { background: #218838; }
 
-    #mensagem {
-      margin-top: 15px; padding: 10px; border-radius: 4px;
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--white);
     }
-    .sucesso { color: green; background: #d4edda; border: 1px solid #c3e6cb; }
-    .erro { color: #721c24; background: #f8d7da; border: 1px solid #f5c6cb; }
-    .carregando { color: #856404; background: #fff3cd; border: 1px solid #ffeaa7; }
 
-    .checkbox-text {
-      background: #fafafa;
-      border: 1px solid #ddd;
-      padding: 10px;
-      border-radius: 5px;
-      font-size: 13px;
-      margin-top: 10px;
-      white-space: pre-line; /* Mantém formatação original */
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
-    .checkbox-line {
-      margin-top: 10px;
-      font-weight: normal;
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .form-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 40px;
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      color: var(--primary);
+      font-size: 1.4rem;
+      margin: 30px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary);
       display: flex;
       align-items: center;
+      gap: 10px;
     }
+
+    .section-title i {
+      font-size: 1.2rem;
+    }
+
+    .intro-text {
+      background: linear-gradient(135deg, #E3F2FD, #F3E5F5);
+      padding: 20px;
+      border-radius: var(--radius);
+      border-left: 4px solid var(--primary);
+      margin-bottom: 25px;
+    }
+
+    .intro-text p {
+      margin-bottom: 10px;
+    }
+
+    .intro-text strong {
+      color: var(--primary);
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: var(--white);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .radio-option:hover {
+      border-color: var(--primary);
+      background: rgba(46, 139, 87, 0.05);
+    }
+
+    .radio-option input {
+      margin-right: 12px;
+      transform: scale(1.2);
+    }
+
+    textarea.form-input {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .checkbox-text {
+      background: var(--background);
+      border: 2px solid var(--border);
+      padding: 20px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 15px 0;
+      white-space: pre-line;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .checkbox-line {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      padding: 15px;
+      background: rgba(46, 139, 87, 0.05);
+      border-radius: var(--radius);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .checkbox-line:hover {
+      border-color: var(--primary);
+    }
+
     .checkbox-line input {
-      width: auto;
-      margin-right: 8px;
+      margin-right: 12px;
+      transform: scale(1.2);
     }
-    hr {
-      margin: 30px 0;
+
+    .checkbox-line label {
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    .divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      margin: 40px 0;
       border: none;
-      border-top: 1px solid #ddd;
     }
-    @media (max-width: 600px) {
-      body { margin: 10px; }
-      form { padding: 15px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 32px;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(46, 139, 87, 0.3);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: var(--white);
+    }
+
+    .btn-success:hover {
+      background: #219653;
+      transform: translateY(-2px);
+    }
+
+    #mensagem {
+      margin: 20px 0;
+      padding: 20px;
+      border-radius: var(--radius);
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .sucesso {
+      background: rgba(39, 174, 96, 0.1);
+      color: var(--success);
+      border: 2px solid var(--success);
+    }
+
+    .erro {
+      background: rgba(231, 76, 60, 0.1);
+      color: var(--error);
+      border: 2px solid var(--error);
+    }
+
+    .carregando {
+      background: rgba(243, 156, 18, 0.1);
+      color: var(--warning);
+      border: 2px solid var(--warning);
+    }
+
+    .required::after {
+      content: " *";
+      color: var(--error);
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+
+      .form-card {
+        padding: 25px;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.2rem;
+      }
+
+      .checkbox-text {
+        padding: 15px;
+        font-size: 13px;
+      }
+
+      .btn {
+        padding: 14px 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-card {
+        padding: 20px;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .radio-group {
+        gap: 8px;
+      }
+
+      .radio-option {
+        padding: 10px;
+      }
+
+      .checkbox-line {
+        padding: 12px;
+      }
+    }
+
+    /* Animações */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-card {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    /* Scroll personalizado */
+    .checkbox-text::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .checkbox-text::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+
+    .checkbox-text::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 3px;
     }
   </style>
 </head>
 
 <body>
-  <h2>&nbsp;</h2>
-  <form id="formCadastro">
-  <h3>Informações Cadastrais e Anamnese</h3>
-  <p>Preencha as informações abaixo para realizar seu cadastro.</p>
-  <p>É necessário preencher <strong>todos os campos</strong> com informações <strong>completas e corretas</strong>, portanto, revise atentamente antes de enviar.</p>
-  <p>Este cadastro é feito <strong>apenas uma vez</strong>.<br>
-    Depois disso, para se inscrever em nossos trabalhos, basta <strong>fazer login com seu número de CPF.</strong></p>
-  <p>Por isso, preencha com cuidado para evitar erros.</p>
-
-    <label for="email">E-mail</label>
-    <input type="email" id="email" name="email" required>
-
-    <label for="nome">Nome Completo</label>
-    <input type="text" id="nome" name="nome" required>
-
-    <label for="cpf">CPF</label>
-    <input type="text" id="cpf" name="cpf" maxlength="14" placeholder="000.000.000-00" required>
-
-    <label for="rg">RG</label>
-    <input type="text" id="rg" name="rg">
-
-    <label for="localNascimento">Local de Nascimento (Cidade e Estado)</label>
-    <input type="text" id="localNascimento" name="localNascimento">
-
-    <label for="dataNascimento">Data de Nascimento</label>
-    <input type="date" id="dataNascimento" name="dataNascimento">
-
-    <label for="telefone">WhatsApp com DDD</label>
-    <input type="text" id="telefone" name="telefone" required>
-
-    <label for="endereco">Endereço (rua, bairro, número e complemento)</label>
-    <input type="text" id="endereco" name="endereco">
-
-    <hr>
-
-    <h3>Ficha de Anamnese</h3>
-
-    <label>1 - Já consagrou a Medicina Ayahuasca?</label>
-    <div>
-      <label><input type="radio" name="ayahuasca" value="Não" required> Não</label>
-      <label><input type="radio" name="ayahuasca" value="Uma vez"> Uma vez</label>
-      <label><input type="radio" name="ayahuasca" value="Mais de 5 vezes"> Mais de 5 vezes</label>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-leaf"></i> Instituto Xamânico</h1>
+      <p>Mistério da Jibóia</p>
     </div>
 
-    <label>2 - Fale um pouco da sua intenção ao vir à cerimônia:</label>
-    <textarea id="intencao" name="intencao"></textarea>
+    <div class="form-card">
+      <div class="intro-text">
+        <p>Preencha as informações abaixo para realizar seu cadastro.</p>
+        <p>É necessário preencher <strong>todos os campos</strong> com informações <strong>completas e corretas</strong>, portanto, revise atentamente antes de enviar.</p>
+        <p>Este cadastro é feito <strong>apenas uma vez</strong>.<br>
+          Depois disso, para se inscrever em nossos trabalhos, basta <strong>fazer login com seu número de CPF.</strong></p>
+        <p>Por isso, preencha com cuidado para evitar erros.</p>
+      </div>
 
-    <label>3 - Estado civil ou convivência:</label>
-    <input type="text" id="estadoCivil" name="estadoCivil">
+      <form id="formCadastro">
+        <h2 class="section-title">
+          <i class="fas fa-user-circle"></i>Informações Pessoais
+        </h2>
 
-    <label>4 - Alguma questão de saúde a deixar registrado para nós?</label>
-    <textarea id="saude" name="saude"></textarea>
+        <div class="form-group">
+          <label for="email" class="form-label required">E-mail</label>
+          <input type="email" id="email" name="email" class="form-input" placeholder="seu@email.com" required>
+        </div>
 
-    <label>5 - Você é ou já foi dependente de alguma substância química?</label>
-    <textarea id="dependencia" name="dependencia"></textarea>
+        <div class="form-group">
+          <label for="nome" class="form-label required">Nome Completo</label>
+          <input type="text" id="nome" name="nome" class="form-input" placeholder="Seu nome completo" required>
+        </div>
 
-    <label>6 - A cerimônia tem vagas limitadas...</label>
-    <div class="checkbox-text">
+        <div class="form-group">
+          <label for="cpf" class="form-label required">CPF</label>
+          <input type="text" id="cpf" name="cpf" class="form-input" maxlength="14" placeholder="000.000.000-00" required>
+        </div>
+
+        <div class="form-group">
+          <label for="rg" class="form-label">RG</label>
+          <input type="text" id="rg" name="rg" class="form-input" placeholder="Número do RG">
+        </div>
+
+        <div class="form-group">
+          <label for="localNascimento" class="form-label">Local de Nascimento (Cidade e Estado)</label>
+          <input type="text" id="localNascimento" name="localNascimento" class="form-input" placeholder="Cidade - Estado">
+        </div>
+
+        <div class="form-group">
+          <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+          <input type="date" id="dataNascimento" name="dataNascimento" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label for="telefone" class="form-label required">WhatsApp com DDD</label>
+          <input type="text" id="telefone" name="telefone" class="form-input" placeholder="(11) 99999-9999" required>
+        </div>
+
+        <div class="form-group">
+          <label for="endereco" class="form-label">Endereço (rua, bairro, número e complemento)</label>
+          <input type="text" id="endereco" name="endereco" class="form-input" placeholder="Rua, número, bairro, complemento...">
+        </div>
+
+        <hr class="divider">
+
+        <h2 class="section-title">
+          <i class="fas fa-file-medical"></i>Ficha de Anamnese
+        </h2>
+
+        <div class="form-group">
+          <label class="form-label required">1 - Já consagrou a Medicina Ayahuasca?</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="ayahuasca" value="Não" required> 
+              <span>Não</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="ayahuasca" value="Uma vez"> 
+              <span>Uma vez</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="ayahuasca" value="Mais de 5 vezes"> 
+              <span>Mais de 5 vezes</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="intencao" class="form-label">2 - Fale um pouco da sua intenção ao vir à cerimônia:</label>
+          <textarea id="intencao" name="intencao" class="form-input" placeholder="Compartilhe sua intenção e expectativas..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="estadoCivil" class="form-label">3 - Estado civil ou convivência:</label>
+          <input type="text" id="estadoCivil" name="estadoCivil" class="form-input" placeholder="Solteiro, casado, união estável...">
+        </div>
+
+        <div class="form-group">
+          <label for="saude" class="form-label">4 - Alguma questão de saúde a deixar registrado para nós?</label>
+          <textarea id="saude" name="saude" class="form-input" placeholder="Informações relevantes sobre sua saúde..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="dependencia" class="form-label">5 - Você é ou já foi dependente de alguma substância química?</label>
+          <textarea id="dependencia" name="dependencia" class="form-input" placeholder="Se sim, compartilhe informações relevantes..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">6 - A cerimônia tem vagas limitadas...</label>
+          <div class="checkbox-text">
 A cerimônia tem vagas limitadas, a ordem dos participantes é feita por ordem de inscrição. 
 Fico ciente que se não entrei, estou na lista de espera.
-    </div>
-    <div class="checkbox-line">
-      <input type="checkbox" id="cienteVagas" name="cienteVagas" required> 
-      <label for="cienteVagas">Ciente</label>
-    </div>
+          </div>
+          <div class="checkbox-line">
+            <input type="checkbox" id="cienteVagas" name="cienteVagas" required> 
+            <label for="cienteVagas">Declaro que estou ciente</label>
+          </div>
+        </div>
 
-    <label>7 - Termo de Responsabilidade</label>
-    <div class="checkbox-text">
+        <div class="form-group">
+          <label class="form-label">7 - Termo de Responsabilidade</label>
+          <div class="checkbox-text">
 Venho de livre e espontânea vontade solicitar o ingresso à sessão com Ayahuasca no Instituto Xamânico Mistério da Jibóia.
 Declaro que estou ciente da natureza desses trabalhos, da preparação exigida, dos detalhes do ritual e da condição expressa
 de permanecer no local até o fechamento dos trabalhos. Também estou ciente da proibição de portar ou usar quaisquer
@@ -166,24 +486,28 @@ Comprometo-me a obedecer a todas as determinações do dirigente dos trabalhos. 
 • Não estou em tratamento com drogas de tarja preta e/ou descritas.
 • Não pratico automedicação.
 • Não tomei vacina de qualquer tipo nos últimos 20 dias.
-    </div>
-    <div class="checkbox-line">
-      <input type="checkbox" id="termoResponsabilidade" name="termoResponsabilidade" required> 
-      <label for="termoResponsabilidade">Ciente</label>
-    </div>
+          </div>
+          <div class="checkbox-line">
+            <input type="checkbox" id="termoResponsabilidade" name="termoResponsabilidade" required> 
+            <label for="termoResponsabilidade">Declaro que li e concordo com o termo</label>
+          </div>
+        </div>
 
-    <label>8 - Autorização de uso dos meus dados</label>
-    <div class="checkbox-text">
-Estou ciente e autorizo o uso dos meus dados para que o Instituto entre em contato comigo sobre as cerimônias e atividades oferecidas.
+        <div class="form-group">
+          <label class="form-label">8 - Autorização de uso dos meus dados</label>
+          <div class="checkbox-text">
+Estou ciente e autorizo o uso dos meus dados para que o Instituto entre em contato comigo sobre das cerimônias e atividades oferecidas.
 Meus dados serão tratados com sigilo e usados apenas para fins relacionados. Lembro que posso solicitar a exclusão da lista a qualquer momento.
-    </div>
-    <div class="checkbox-line">
-      <input type="checkbox" id="usoDados" name="usoDados" required> 
-      <label for="usoDados">Ciente</label>
-    </div>
+          </div>
+          <div class="checkbox-line">
+            <input type="checkbox" id="usoDados" name="usoDados" required> 
+            <label for="usoDados">Autorizo o uso dos meus dados</label>
+          </div>
+        </div>
 
-    <label>9 - Termo de Cancelamento e Política de Devolução</label>
-    <div class="checkbox-text">
+        <div class="form-group">
+          <label class="form-label">9 - Termo de Cancelamento e Política de Devolução</label>
+          <div class="checkbox-text">
 Ao confirmar sua inscrição na cerimônia, o participante declara estar ciente e de acordo com a política de cancelamento e devolução descrita abaixo:
 Após a confirmação da inscrição e realização do pagamento, não haverá devolução de valores sob nenhuma circunstância,
 inclusive em casos de desistência ou impossibilidade de comparecimento.
@@ -194,33 +518,62 @@ No entanto, oferecemos a possibilidade de utilizar o valor pago como crédito pa
 - O crédito seja utilizado em até 3 meses após a data original;
 - O crédito é intransferível e pessoal.
 ⚠ Em casos de desistência no dia da cerimônia ou durante sua realização, não haverá reembolso ou crédito.
-    </div>
-    <div class="checkbox-line">
-      <input type="checkbox" id="politicaCancelamento" name="politicaCancelamento" required> 
-      <label for="politicaCancelamento">Ciente</label>
-    </div>
+          </div>
+          <div class="checkbox-line">
+            <input type="checkbox" id="politicaCancelamento" name="politicaCancelamento" required> 
+            <label for="politicaCancelamento">Declaro que estou ciente da política</label>
+          </div>
+        </div>
 
-    <label>Declaração Final</label>
-    <div class="checkbox-text">
+        <div class="form-group">
+          <label class="form-label">Declaração Final</label>
+          <div class="checkbox-text">
 Ao enviar este formulário, declaro que as informações fornecidas são verdadeiras e completas, que foram preenchidas por mim,
 e que fui informado(a) sobre os aspectos legais e de saúde envolvidos na cerimônia. Entendo que o Instituto segue práticas
 seguras e não se responsabiliza por quaisquer complicações que possam surgir devido a condições de saúde não declaradas ou desconhecidas.
-    </div>
-    <div class="checkbox-line">
-      <input type="checkbox" id="declaracaoFinal" name="declaracaoFinal" required> 
-      <label for="declaracaoFinal">Ciente</label>
-    </div>
+          </div>
+          <div class="checkbox-line">
+            <input type="checkbox" id="declaracaoFinal" name="declaracaoFinal" required> 
+            <label for="declaracaoFinal">Confirmo a declaração final</label>
+          </div>
+        </div>
 
-    <button type="submit">Enviar Cadastro</button>
-  </form>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i>Enviar Cadastro
+        </button>
+      </form>
 
-  <div id="mensagem"></div>
-  <button id="btnVoltar" onclick="window.location.href='https://flaviocoen.github.io/misteriodajiboia/evento1.html'">
-    Voltar para a Inscrição
-  </button>
+      <div id="mensagem"></div>
+      
+      <button id="btnVoltar" class="btn btn-success" onclick="window.location.href='https://flaviocoen.github.io/misteriodajiboia/evento1.html'" style="display: none;">
+        <i class="fas fa-arrow-left"></i>Voltar para a Inscrição
+      </button>
+    </div>
+  </div>
 
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbwHTaZXuaK9XRuy7WLsXlYiF_XasL5e5sQFGdOksa1wpHA3rUbJ16cEUZH5-q12jHruTQ/exec";
+
+    // Formatação do CPF
+    document.getElementById("cpf").addEventListener("input", function(e) {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value.length <= 11) {
+        value = value.replace(/(\d{3})(\d)/, "$1.$2");
+        value = value.replace(/(\d{3})(\d)/, "$1.$2");
+        value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      }
+      e.target.value = value;
+    });
+
+    // Formatação do telefone
+    document.getElementById("telefone").addEventListener("input", function(e) {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value.length <= 11) {
+        value = value.replace(/(\d{2})(\d)/, "($1) $2");
+        value = value.replace(/(\d{5})(\d)/, "$1-$2");
+      }
+      e.target.value = value;
+    });
 
     document.getElementById("formCadastro").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -232,6 +585,7 @@ seguras e não se responsabiliza por quaisquer complicações que possam surgir 
 
       const btn = e.target.querySelector('button[type="submit"]');
       btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
 
       let cpf = document.getElementById("cpf").value.trim();
       cpf = "'" + cpf;
@@ -244,6 +598,7 @@ seguras e não se responsabiliza por quaisquer complicações que possam surgir 
           mensagemDiv.textContent = "⚠️ Já existe um cadastro com este CPF.";
           mensagemDiv.className = "erro";
           btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Cadastro';
           return;
         }
 
@@ -261,6 +616,7 @@ seguras e não se responsabiliza por quaisquer complicações que possam surgir 
           mensagemDiv.className = "sucesso";
           e.target.reset();
           btnVoltar.style.display = "block";
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
           throw new Error(resultado || "Erro na requisição");
         }
@@ -269,9 +625,9 @@ seguras e não se responsabiliza por quaisquer complicações que possam surgir 
         mensagemDiv.className = "erro";
       } finally {
         btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Cadastro';
       }
     });
   </script>
 </body>
 </html>
-
