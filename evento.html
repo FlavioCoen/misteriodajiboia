@@ -154,7 +154,28 @@
             document.getElementById('tabela').innerHTML = '';
         }
 
-        function criarLinkWhatsApp(telefone) {
+        function criarMensagemPersonalizada(nome, status) {
+            return `Olá ${nome}.
+
+Seu cadastro para a cerimônia foi realizado com sucesso 🌸.
+
+
+Seu status atual é: ${status}.
+
+
+As vagas são preenchidas por ordem de inscrição.
+Caso seu status esteja em Fila de Espera, significa que já estamos com as vagas esgotadas.
+
+Se alguém desistir, você poderá participar e será avisado com antecedência.
+
+
+Agradecemos de coração por sua presença e confiança 💚.
+
+
+Caso precise de mais informações, estamos à disposição.`;
+        }
+
+        function criarLinkWhatsApp(telefone, nome, status) {
             if (!telefone) return telefone || '';
             
             // Remove caracteres não numéricos
@@ -163,7 +184,7 @@
             // Se o número tem 10 ou 11 dígitos (com DDD)
             if (numeroLimpo.length === 10 || numeroLimpo.length === 11) {
                 const numeroFormatado = '55' + numeroLimpo;
-                const mensagem = "Olá! Vi sua inscrição no evento Criança Interior. Como posso ajudar?";
+                const mensagem = criarMensagemPersonalizada(nome, status);
                 const url = `https://wa.me/${numeroFormatado}?text=${encodeURIComponent(mensagem)}`;
                 
                 return `<a href="${url}" target="_blank" class="whatsapp-link" title="Abrir WhatsApp">${telefone} 📱</a>`;
@@ -211,7 +232,7 @@
                                 <td>${data}</td>
                                 <td><strong>${pessoa.NomeCompleto || ''}</strong></td>
                                 <td>${pessoa.CPF || ''}</td>
-                                <td>${criarLinkWhatsApp(pessoa.Telefone)}</td>
+                                <td>${criarLinkWhatsApp(pessoa.Telefone, pessoa.NomeCompleto, pessoa.Status)}</td>
                                 <td>${pessoa.Status || ''}</td>
                                 <td>${pessoa.JaConsagrei || 'Não'}</td>
                             </tr>
