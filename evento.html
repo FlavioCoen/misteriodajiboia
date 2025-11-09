@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Área Administrativa</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .admin-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .hidden {
+            display: none;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2E8B57;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #26734a;
+        }
+        .logout-btn {
+            background: #dc3545;
+            width: auto;
+            padding: 8px 15px;
+            float: right;
+        }
+        .logout-btn:hover {
+            background: #c82333;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 10px; 
+            text-align: left; 
+        }
+        th { 
+            background-color: #2E8B57; 
+            color: white; 
+        }
+        tr:nth-child(even) { 
+            background-color: #f9f9f9; 
+        }
+        .loading { 
+            padding: 40px; 
+            text-align: center; 
+            font-size: 18px; 
+            color: #666; 
+        }
+        .error {
+            color: red;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .whatsapp-link {
+            color: #25D366;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .whatsapp-link:hover {
+            text-decoration: underline;
+            color: #128C7E;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div id="loginScreen" class="login-container">
+        <h2>🔐 Área Administrativa</h2>
+        <div id="loginError" class="error" style="display: none;"></div>
+        <input type="text" id="usuario" placeholder="Usuário" value="admin">
+        <input type="password" id="senha" placeholder="Senha" value="123456">
+        <button onclick="fazerLogin()">Entrar</button>
+    </div>
+
+    <!-- Tela Administrativa -->
+    <div id="adminScreen" class="admin-container hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>📋 Lista de Inscrições - Evento 1</h1>
+            <button class="logout-btn" onclick="fazerLogout()">Sair</button>
+        </div>
+        
+        <div id="loading" class="loading">Carregando dados...</div>
+        <div id="tabela"></div>
+    </div>
+
+    <script>
+        // SUA URL
+        const URL = "https://script.google.com/macros/s/AKfycbwhhW58YgdiowQ-R9zb8t5X3ZXs4lW6oo0xM5zptQCHTq5U4vvCQqEsb9TAQfiMc8JfeQ/exec";
+        
+        // Credenciais de login
+        const USUARIO_CORRETO = "admin";
+        const SENHA_CORRETA = "123456";
+
+        function fazerLogin() {
+            const usuario = document.getElementById('usuario').value;
+            const senha = document.getElementById('senha').value;
+            const errorDiv = document.getElementById('loginError');
+
+            if (usuario === USUARIO_CORRETO && senha === SENHA_CORRETA) {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('adminScreen').classList.remove('hidden');
+                carregarDados();
+            } else {
+                errorDiv.style.display = 'block';
+                errorDiv.textContent = 'Usuário ou senha incorretos!';
+            }
+        }
+
+        function fazerLogout() {
+            document.getElementById('adminScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('usuario').value = 'admin';
+            document.getElementById('senha').value = '123456';
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('tabela').innerHTML = '';
+        }
+
+        function criarLinkWhatsApp(telefone) {
+            if (!telefone) return telefone || '';
+            
+            // Remove caracteres não numéricos
+            const numeroLimpo = telefone.toString().replace(/\D/g, '');
+            
+            // Se o número tem 10 ou 11 dígitos (com DDD)
+            if (numeroLimpo.length === 10 || numeroLimpo.length === 11) {
+                const numeroFormatado = '55' + numeroLimpo;
+                const mensagem = "Olá! Vi sua inscrição no evento Criança Interior. Como posso ajudar?";
+                const url = `https://wa.me/${numeroFormatado}?text=${encodeURIComponent(mensagem)}`;
+                
+                return `<a href="${url}" target="_blank" class="whatsapp-link" title="Abrir WhatsApp">${telefone} 📱</a>`;
+            }
+            
+            // Se não conseguiu formatar, retorna o número normal
+            return telefone;
+        }
+
+        function carregarDados() {
+            fetch(URL)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro na resposta do servidor');
+                    }
+                    return response.json();
+                })
+                .then(dados => {
+                    console.log('Dados recebidos:', dados);
+                    document.getElementById('loading').style.display = 'none';
+                    
+                    if (!dados || dados.length === 0) {
+                        document.getElementById('tabela').innerHTML = '<p>Nenhuma inscrição encontrada</p>';
+                        return;
+                    }
+                    
+                    let html = '<table>';
+                    html += `
+                        <tr>
+                            <th>Data</th>
+                            <th>Nome Completo</th>
+                            <th>CPF</th>
+                            <th>Telefone</th>
+                            <th>Status</th>
+                            <th>Já Consagrou</th>
+                        </tr>
+                    `;
+                    
+                    dados.forEach(pessoa => {
+                        const data = pessoa.DataCadastro ? 
+                            new Date(pessoa.DataCadastro).toLocaleString('pt-BR') : '';
+                            
+                        html += `
+                            <tr>
+                                <td>${data}</td>
+                                <td><strong>${pessoa.NomeCompleto || ''}</strong></td>
+                                <td>${pessoa.CPF || ''}</td>
+                                <td>${criarLinkWhatsApp(pessoa.Telefone)}</td>
+                                <td>${pessoa.Status || ''}</td>
+                                <td>${pessoa.JaConsagrei || 'Não'}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    html += '</table>';
+                    document.getElementById('tabela').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erro completo:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('tabela').innerHTML = 
+                        '<p style="color: red; padding: 20px; text-align: center;">Erro ao carregar dados. Verifique o console.</p>';
+                });
+        }
+
+        // Enter para fazer login
+        document.getElementById('senha').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                fazerLogin();
+            }
+        });
+    </script>
+</body>
+</html>
