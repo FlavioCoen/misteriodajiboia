@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navegação - Instituto Xamânico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+            color: #2C3E50;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2E8B57;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #7F8C8D;
+        }
+
+        .busca {
+            margin-bottom: 30px;
+        }
+
+        .campo-busca {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #E1E8ED;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .campo-busca:focus {
+            outline: none;
+            border-color: #2E8B57;
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+        }
+
+        .campo-busca::placeholder {
+            color: #AAB7B8;
+        }
+
+        .contador {
+            text-align: right;
+            margin-top: 10px;
+            color: #7F8C8D;
+            font-size: 0.9rem;
+        }
+
+        .lista-paginas {
+            display: grid;
+            gap: 15px;
+        }
+
+        .item-pagina {
+            display: block;
+            padding: 20px;
+            background: #F8F9FA;
+            border: 2px solid #E1E8ED;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #2C3E50;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .item-pagina:hover {
+            border-color: #2E8B57;
+            background: rgba(46, 139, 87, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.2);
+        }
+
+        .nome-pagina {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #2E8B57;
+        }
+
+        .descricao {
+            color: #7F8C8D;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .url {
+            font-size: 0.8rem;
+            color: #95a5a6;
+            word-break: break-all;
+        }
+
+        .sem-resultados {
+            text-align: center;
+            padding: 40px;
+            color: #7F8C8D;
+            font-style: italic;
+        }
+
+        .atualizacao {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #7F8C8D;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌿 Instituto Xamânico</h1>
+            <p>Mistério da Jibóia - Navegação Rápida</p>
+        </div>
+
+        <div class="busca">
+            <input 
+                type="text" 
+                id="campoBusca" 
+                class="campo-busca" 
+                placeholder="🔍 Digite para buscar por função, nome ou descrição..."
+            >
+            <div class="contador">
+                <span id="contador">0</span> páginas encontradas
+            </div>
+        </div>
+
+        <div class="lista-paginas" id="listaPaginas">
+            <!-- As páginas serão carregadas aqui -->
+        </div>
+
+        <div class="atualizacao">
+            <p>📅 Última atualização: <span id="dataAtualizacao"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // LISTA DAS SUAS PÁGINAS REAIS
+        const paginas = [
+            {
+                nome: "🏠 Página Inicial",
+                arquivo: "index.html",
+                descricao: "Página principal do Instituto Xamânico Mistério da Jibóia",
+                funcao: "inicial principal home instituto apresentação",
+                url: "https://flaviocoen.github.io/misteriodajiboia/"
+            },
+            {
+                nome: "🎟️ Inscrição para Rituais",
+                arquivo: "evento1.html",
+                descricao: "Formulário para inscrição em cerimônias e rituais",
+                funcao: "inscrição ritual cerimonia evento participação",
+                url: "https://flaviocoen.github.io/misteriodajiboia/evento1.html"
+            },
+            {
+                nome: "📝 Cadastro de Usuários", 
+                arquivo: "cadastro.html",
+                descricao: "Formulário para cadastro inicial de novos participantes",
+                funcao: "cadastro usuario novo participante formulário",
+                url: "https://flaviocoen.github.io/misteriodajiboia/cadastro.html"
+            },
+            {
+                nome: "📊 Relação de Usuários Cadastrados",
+                arquivo: "admin.html", 
+                descricao: "Página administrativa com lista completa de todos os cadastros",
+                funcao: "administrativo lista cadastros usuarios relatório",
+                url: "https://flaviocoen.github.io/misteriodajiboia/admin.html"
+            },
+            {
+                nome: "📋 Relação de Inscritos para Ritual",
+                arquivo: "evento.html",
+                descricao: "Lista de participantes inscritos para eventos específicos", 
+                funcao: "inscritos participantes evento ritual lista",
+                url: "https://flaviocoen.github.io/misteriodajiboia/evento.html"
+            },
+            {
+                nome: "📄 Termo para Assinatura",
+                arquivo: "termo.html",
+                descricao: "Geração de termos em formato A4 para impressão e assinatura",
+                funcao: "termo assinatura impressão A4 documento",
+                url: "https://flaviocoen.github.io/misteriodajiboia/termo.html"
+            }
+        ];
+
+        function filtrarPaginas(termo) {
+            const lista = document.getElementById('listaPaginas');
+            const contador = document.getElementById('contador');
+            
+            if (!termo) {
+                // Mostra todas as páginas
+                exibirPaginas(paginas);
+                contador.textContent = paginas.length;
+                return;
+            }
+
+            const termoLower = termo.toLowerCase();
+            const paginasFiltradas = paginas.filter(pagina => 
+                pagina.nome.toLowerCase().includes(termoLower) ||
+                pagina.descricao.toLowerCase().includes(termoLower) ||
+                pagina.funcao.toLowerCase().includes(termoLower) ||
+                pagina.arquivo.toLowerCase().includes(termoLower)
+            );
+
+            exibirPaginas(paginasFiltradas);
+            contador.textContent = paginasFiltradas.length;
+        }
+
+        function exibirPaginas(paginasParaExibir) {
+            const lista = document.getElementById('listaPaginas');
+            
+            if (paginasParaExibir.length === 0) {
+                lista.innerHTML = '<div class="sem-resultados">Nenhuma página encontrada com esse termo de busca</div>';
+                return;
+            }
+
+            let html = '';
+            paginasParaExibir.forEach(pagina => {
+                html += `
+                    <a href="${pagina.url}" class="item-pagina">
+                        <div class="nome-pagina">${pagina.nome}</div>
+                        <div class="descricao">${pagina.descricao}</div>
+                        <div class="url">${pagina.arquivo}</div>
+                    </a>
+                `;
+            });
+
+            lista.innerHTML = html;
+        }
+
+        function inicializar() {
+            // Configura busca em tempo real
+            document.getElementById('campoBusca').addEventListener('input', function(e) {
+                filtrarPaginas(e.target.value);
+            });
+
+            // Mostra todas as páginas inicialmente
+            filtrarPaginas('');
+            
+            // Data de atualização
+            document.getElementById('dataAtualizacao').textContent = 
+                new Date().toLocaleDateString('pt-BR');
+        }
+
+        // Inicializa quando a página carrega
+        document.addEventListener('DOMContentLoaded', inicializar);
+    </script>
+</body>
+</html>
