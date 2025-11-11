@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cadastros - Instituto Xamânico</title>
+    <style>
+        body { font-family: Arial; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        h1 { color: #2E8B57; text-align: center; margin-bottom: 30px; }
+        .lista-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 15px; 
+            margin: 8px 0; 
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .lista-item:hover {
+            background: #f0f8f0;
+            border-color: #2E8B57;
+        }
+        .nome { 
+            font-weight: bold; 
+            font-size: 16px;
+            color: #2C3E50;
+        }
+        .data { 
+            color: #7F8C8D; 
+            font-size: 14px;
+        }
+        .btn { 
+            background: #8B4513; 
+            color: white; 
+            border: none; 
+            padding: 8px 15px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 14px;
+        }
+        .btn:hover {
+            background: #654321;
+        }
+        .loading, .empty { text-align: center; padding: 40px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Cadastros - Instituto Xamânico</h1>
+        <div id="lista">Carregando...</div>
+    </div>
+
+    <script>
+        const url = "https://script.google.com/macros/s/AKfycbx90t5EYUTYcBytjN7hNaiMCipWyKQmj79D5QZcbNjt0gvhIFmdbR2nNKubTcfA0BRa/exec";
+        
+        // Função para formatar data
+        function formatarData(data) {
+            if (!data) return 'Data não informada';
+            
+            try {
+                if (data.includes('T')) {
+                    const dataObj = new Date(data);
+                    return dataObj.toLocaleDateString('pt-BR');
+                }
+                if (data.includes('-')) {
+                    const partes = data.split('-');
+                    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+                }
+                return data;
+            } catch (e) {
+                return data;
+            }
+        }
+        
+        async function carregar() {
+            try {
+                const resposta = await fetch(url);
+                const texto = await resposta.text();
+                
+                if (texto.includes("CPF não informado")) {
+                    document.getElementById('lista').innerHTML = '<div class="empty">Nenhum cadastro encontrado</div>';
+                    return;
+                }
+                
+                const dados = JSON.parse(texto);
+                let html = '';
+                
+                // Ordenar por nome
+                dados.sort((a, b) => (a.NomeCompleto || '').localeCompare(b.NomeCompleto || ''));
+                
+                dados.forEach(pessoa => {
+                    html += `<div class="lista-item" onclick="imprimir('${encodeURIComponent(JSON.stringify(pessoa))}')">
+                        <div>
+                            <div class="nome">${pessoa.NomeCompleto || 'Nome não informado'}</div>
+                        </div>
+                        <div class="data">${formatarData(pessoa.DataCadastro)}</div>
+                    </div>`;
+                });
+                
+                document.getElementById('lista').innerHTML = html || '<div class="empty">Nenhum cadastro encontrado</div>';
+                
+            } catch (erro) {
+                document.getElementById('lista').innerHTML = '<div class="empty">Erro: ' + erro.message + '</div>';
+            }
+        }
+
+        function imprimir(dados) {
+            const pessoa = JSON.parse(decodeURIComponent(dados));
+            const janela = window.open('', '_blank');
+            
+            janela.document.write(`
+                <html>
+                <head><title>Termo - ${pessoa.NomeCompleto}</title>
+                <style>
+                    body { font-family: Arial; margin: 20px; line-height: 1.4; }
+                    .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #2E8B57; padding-bottom: 15px; }
+                    .dados { 
+                        background: #f8f9fa; 
+                        padding: 20px; 
+                        margin: 15px 0;
+                        border-radius: 8px;
+                        border-left: 4px solid #2E8B57;
+                    }
+                    .campo { margin: 10px 0; }
+                    .campo strong { display: inline-block; width: 300px; }
+                    .assinatura { 
+                        margin-top: 100px; 
+                        border-top: 1px solid #000; 
+                        padding-top: 20px;
+                        text-align: center;
+                    }
+                    @media print { 
+                        body { margin: 15mm; }
+                        .no-print { display: none; }
+                    }
+                    .btn { 
+                        background: #2E8B57; 
+                        color: white; 
+                        padding: 10px 20px; 
+                        border: none; 
+                        border-radius: 4px; 
+                        cursor: pointer; 
+                        margin: 20px auto; 
+                        display: block; 
+                    }
+                    @page {
+                        size: A4;
+                        margin: 20mm;
+                    }
+                </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h2>INSTITUTO XAMÂNICO MISTÉRIO DA JIBÓIA</h2>
+                        <h3>Termo de Cadastro e Consentimento</h3>
+                    </div>
+                    
+                    <div class="dados">
+                        <div class="campo"><strong>Nome Completo:</strong> ${pessoa.NomeCompleto || ''}</div>
+                        <div class="campo"><strong>CPF:</strong> ${pessoa.CPF || ''}</div>
+                        <div class="campo"><strong>RG:</strong> ${pessoa.RG || ''}</div>
+                        <div class="campo"><strong>Email:</strong> ${pessoa.Email || ''}</div>
+                        <div class="campo"><strong>Telefone:</strong> ${pessoa.Telefone || ''}</div>
+                        <div class="campo"><strong>Data Nascimento:</strong> ${formatarData(pessoa.DataNascimento)}</div>
+                        <div class="campo"><strong>Local Nascimento:</strong> ${pessoa.LocalNascimento || ''}</div>
+                        <div class="campo"><strong>Endereço:</strong> ${pessoa.Endereco || ''}</div>
+                        <div class="campo"><strong>Estado Civil:</strong> ${pessoa.EstadoCivil || ''}</div>
+                        <div class="campo"><strong>Experiência Ayahuasca:</strong> ${pessoa.Ayahuasca || ''}</div>
+                        <div class="campo"><strong>Fale um pouco da sua intenção ao vir à cerimônia com Ayahuasca:</strong> ${pessoa.Intencao || ''}</div>
+                        <div class="campo"><strong>Questões Saúde:</strong> ${pessoa.Saude || ''}</div>
+                    </div>
+                    
+                    <div class="assinatura">
+                        <p>___________________________________</p>
+                        <p>Assinatura do Participante</p>
+                        <p>Data: ___/___/_______</p>
+                    </div>
+
+                    <button class="btn no-print" onclick="window.print()">🖨️ Imprimir Termo</button>
+                </body>
+                </html>
+            `);
+            janela.document.close();
+        }
+
+        carregar();
+    </script>
+</body>
+</html>
