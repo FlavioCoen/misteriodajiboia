@@ -211,6 +211,7 @@
       text-decoration: none;
       width: 100%;
       margin-top: 10px;
+      position: relative;
     }
 
     .btn-primary {
@@ -245,10 +246,34 @@
     }
 
     .btn:disabled {
-      background: #6c757d;
+      opacity: 0.7;
       cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn-loading {
+      position: relative;
+      color: transparent !important;
+    }
+
+    .btn-loading::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 50%;
+      left: 50%;
+      margin-left: -10px;
+      margin-top: -10px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .mensagem {
@@ -600,11 +625,18 @@
     btnBuscar.addEventListener("click", async () => {
       msgErro.classList.add("hidden");
       const cpf = cpfLogin.value.replace(/\D/g, "");
+      
       if (!cpf) {
         msgErro.textContent = "Digite um CPF válido.";
         msgErro.classList.remove("hidden");
         return;
       }
+
+      // Adiciona loading no botão
+      btnBuscar.disabled = true;
+      btnBuscar.classList.add("btn-loading");
+      btnBuscar.innerHTML = '<i class="fas fa-search"></i> Buscando...';
+
       try {
         const resp = await fetch(`${scriptURL}?acao=evento&cpf=${cpf}`);
         const data = await resp.json();
@@ -612,20 +644,24 @@
         if (data.erro) {
           msgErro.textContent = "CPF não encontrado. Clique em 'Cadastre-se' para se registrar.";
           msgErro.classList.remove("hidden");
-          return;
+        } else {
+          document.getElementById("nome").value = data.nome || "";
+          document.getElementById("cpf").value = data.cpf || "";
+          document.getElementById("rg").value = data.rg || "";
+          document.getElementById("telefone").value = data.telefone || "";
+
+          document.getElementById("login").classList.add("hidden");
+          formEvento.classList.remove("hidden");
         }
-
-        document.getElementById("nome").value = data.nome || "";
-        document.getElementById("cpf").value = data.cpf || "";
-        document.getElementById("rg").value = data.rg || "";
-        document.getElementById("telefone").value = data.telefone || "";
-
-        document.getElementById("login").classList.add("hidden");
-        formEvento.classList.remove("hidden");
 
       } catch (err) {
         msgErro.textContent = "Erro ao buscar: " + err.message;
         msgErro.classList.remove("hidden");
+      } finally {
+        // Remove loading independente do resultado
+        btnBuscar.disabled = false;
+        btnBuscar.classList.remove("btn-loading");
+        btnBuscar.innerHTML = '<i class="fas fa-search"></i> Buscar Cadastro';
       }
     });
 
@@ -715,4 +751,3 @@
 </body>
 
 </html>
-
