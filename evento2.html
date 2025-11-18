@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Instituto Xamânico Mistério da Jibóia</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --primary: #2E8B57;
+      --primary-dark: #26734a;
+      --secondary: #8B4513;
+      --accent: #FFD700;
+      --text: #2C3E50;
+      --text-light: #7F8C8D;
+      --background: #F8F9FA;
+      --white: #FFFFFF;
+      --border: #E1E8ED;
+      --success: #27AE60;
+      --warning: #F39C12;
+      --error: #E74C3C;
+      --shadow: 0 4px 20px rgba(0,0,0,0.1);
+      --radius: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--white);
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .form-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 40px;
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      color: var(--primary);
+      font-size: 1.4rem;
+      margin: 30px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title i {
+      font-size: 1.2rem;
+    }
+
+    .info-section {
+      background: linear-gradient(135deg, #E3F2FD, #F3E5F5);
+      padding: 20px;
+      border-radius: var(--radius);
+      border-left: 4px solid var(--primary);
+      margin-bottom: 25px;
+    }
+
+    .info-section p {
+      margin-bottom: 10px;
+    }
+
+    .info-section strong {
+      color: var(--primary);
+    }
+
+    .dieta-list {
+      margin: 15px 0;
+      padding-left: 20px;
+    }
+
+    .dieta-list li {
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: var(--white);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+    }
+
+    .form-input:read-only {
+      background-color: #f8f9fa;
+      color: #6c757d;
+    }
+
+    .checkbox-line {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      padding: 15px;
+      background: rgba(46, 139, 87, 0.05);
+      border-radius: var(--radius);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .checkbox-line:hover {
+      border-color: var(--primary);
+    }
+
+    .checkbox-line input {
+      margin-right: 12px;
+      transform: scale(1.2);
+    }
+
+    .checkbox-line label {
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .radio-option:hover {
+      border-color: var(--primary);
+      background: rgba(46, 139, 87, 0.05);
+    }
+
+    .radio-option input {
+      margin-right: 12px;
+      transform: scale(1.2);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 32px;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      width: 100%;
+      margin-top: 10px;
+      position: relative;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(46, 139, 87, 0.3);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: var(--white);
+    }
+
+    .btn-success:hover {
+      background: #219653;
+      transform: translateY(-2px);
+    }
+
+    .btn-info {
+      background: #17a2b8;
+      color: var(--white);
+    }
+
+    .btn-info:hover {
+      background: #138496;
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn-loading {
+      position: relative;
+      color: transparent !important;
+    }
+
+    .btn-loading::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 50%;
+      left: 50%;
+      margin-left: -10px;
+      margin-top: -10px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .mensagem {
+      margin: 20px 0;
+      padding: 20px;
+      border-radius: var(--radius);
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .sucesso {
+      background: rgba(39, 174, 96, 0.1);
+      color: var(--success);
+      border: 2px solid var(--success);
+    }
+
+    .erro {
+      background: rgba(231, 76, 60, 0.1);
+      color: var(--error);
+      border: 2px solid var(--error);
+    }
+
+    .carregando {
+      background: rgba(243, 156, 18, 0.1);
+      color: var(--warning);
+      border: 2px solid var(--warning);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      margin: 30px 0;
+      border: none;
+    }
+
+    .login-info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: var(--radius);
+      color: var(--white);
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .required::after {
+      content: " *";
+      color: var(--error);
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+
+      .form-card {
+        padding: 25px;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.2rem;
+      }
+
+      .btn {
+        padding: 14px 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-card {
+        padding: 20px;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .radio-group {
+        gap: 8px;
+      }
+
+      .radio-option {
+        padding: 10px;
+      }
+
+      .checkbox-line {
+        padding: 12px;
+      }
+    }
+
+    /* Animações */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-card {
+      animation: fadeIn 0.6s ease-out;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-child"></i> Realize aqui sua Inscrição</h1>
+      <p>Instituto Xamânico Mistério da Jibóia</p>
+    </div>
+
+    <div class="form-card">
+      <div id="login">
+        <div id="infoEvento">
+          <h2 class="section-title">
+            <i class="fas fa-heart"></i>O Evento2
+          </h2>
+          
+          <div class="info-section">
+            <p><strong>Queridos irmãos (ãs),</strong></p>
+            <p>Há dentro de cada um de nós uma criança que ainda vive — cheia de sonhos, curiosidades e também de lembranças que moldaram quem somos. Ela guarda tanto a leveza da alegria quanto as marcas das dores que um día sentimos.</p>
+            <p>Este encontro é um convite para olhar para dentro com ternura, escutar o que essa criança tem a dizer e oferecer a ela o acolhimento que talvez tenha faltado.</p>
+            <p>Cuidar da criança interior é voltar a se permitir sorrir, confiar e amar com leveza.</p>
+            <p>É lembrar que o que somos hoje também carrega a pureza do que fomos e podemos escolher acolher essa parte com amor.</p>
+            <p>Cuidar da criança interior é abrir espaço para a alegria simples, para o riso que nasce sem motivo, para a ternura que cura. É lembrar que a vida pode ser leve e que o amor começa dentro de nós.</p>
+            <p>Venha com o coração aberto. A criança que habita em você está esperando por esse abraço.</p>
+          </div>
+
+          <hr class="divider">
+          
+          <h3 class="section-title">
+            <i class="fas fa-calendar-alt"></i>Informações do Encontro
+          </h3>
+          <div class="info-section">
+            <p><strong>Data:</strong> 16 de Novembro de 2025</p>
+            <p><strong>Horário de chegada:</strong> 15h00<br>
+            <strong>Horário de início:</strong> 16h00<br>
+            <strong>Tempo de ritual:</strong> 04h00</p>
+            <p><em>É necessário fazer a última refeição três horas antes do início do ritual.</em></p>
+            
+            <p><strong>Contribuição:</strong> R$ 60,00<br>
+            <strong>Pix:</strong> 264.001.088-31<br>
+            <strong>CPF:</strong> Flávio Martins Coen (Enviar comprovante)<br>
+            <em><strong>Gratuito para sua primeira consagração</strong> 😀</em></p>
+          </div>
+
+          <hr class="divider">
+
+          <h3 class="section-title">
+            <i class="fas fa-utensils"></i>Dieta para o Ritual
+          </h3>
+          <div class="info-section">
+            <p><strong>✔ Alimentação leve (dia anterior + dia do ritual):</strong></p>
+            <ul class="dieta-list">
+              <li><strong>Evite:</strong> carnes vermelhas, laticínios, banana e Whey Protein (sobrecarregam a digestão e podem causar interações).</li>
+              <li><strong>Reduza:</strong> café, açúcar e doces (alteram energia e equilíbrio emocional).</li>
+              <li><strong>Evite:</strong> feijão e alimentos gasosos (provocam desconforto intestinal durante o ritual).</li>
+            </ul>
+            
+            <p><strong>✔ Substâncias proibidas:</strong></p>
+            <ul class="dieta-list">
+              <li>Álcool e drogas ilícitas (interferem na experiência e colocam a saúde em risco).</li>
+            </ul>
+            
+            <p><strong>✔ Preparo energético:</strong></p>
+            <ul class="dieta-list">
+              <li>Abstenção sexual 2 dias antes (conserva energia vital para o trabalho espiritual).</li>
+            </ul>
+            
+            <p><strong>Objetivo:</strong> Garantir segurança, conforto físico e conexão profunda com a medicina.</p>
+          </div>
+
+          <hr class="divider">
+
+          <h3 class="section-title">
+            <i class="fas fa-brain"></i>Pré-Ritual
+          </h3>
+          <div class="info-section">
+            <p>É fundamental estar atento aos pensamentos negativos e procurar manter a calma. Sempre que possível, recomenda-se praticar meditações, pois o processo de cura já começa a se iniciar para aqueles que se dispuserem a participar.</p>
+          </div>
+
+          <hr class="divider">
+
+          <h3 class="section-title">
+            <i class="fas fa-pills"></i>Medicamentos
+          </h3>
+          <div class="info-section">
+            <p>Se você faz uso de antidepressivos (como Fluoxetina, Sertralina), IMAOs, lítio, Ritalina ou outros psicoativos, é essencial comunicar com antecedência antes de participar de um ritual com ayahuasca. Esses medicamentos podem ter interações perigosas com o chá, exigindo uma análise individual.</p>
+          </div>
+
+          <hr class="divider">
+
+          <h3 class="section-title">
+            <i class="fas fa-exclamation-triangle"></i>Contraindicação
+          </h3>
+          <div class="info-section">
+            <p>Consideramos contraindicado o uso da Ayahuasca para pessoas com personalidades esquizoides e pré-psicóticas, assim como para neuróticos com instabilidade de identidade e níveis elevados de ansiedade, como na síndrome do pânico.</p>
+            <p><strong>Por favor, comunique-nos caso esteja utilizando algum medicamento.</strong></p>
+          </div>
+
+          <hr class="divider">
+
+          <h3 class="section-title">
+            <i class="fas fa-suitcase"></i>O que trazer
+          </h3>
+          <div class="info-section">
+            <ul class="dieta-list">
+              <li>Documento original com foto</li>
+              <li>Travesseiros e cobertores para o seu maior conforto</li>
+              <li>Garrafa de água</li>
+              <li>Alimento para partilhar ao final da cerimônia</li>
+            </ul>
+            <p>Por favor, venha vestido com roupas de cores claras, confortáveis e discretas. Evite usar roupas com decotes, transparentes, justas ou saias curtas.</p>
+            <p><strong>Obs:</strong> Caso você não possa comparecer por qualquer motivo, por favor, avise-nos para que possamos ceder a vaga a outra pessoa.</p>
+            <p><strong>Gratidão!</strong></p>
+          </div>
+
+          <hr class="divider">
+        </div>
+
+        <div class="login-info">
+          <p><strong>Digite seu CPF para participar</strong></p>
+          <p><small>Se ainda não tem cadastro, clique em <strong>Cadastre-se</strong> abaixo</small></p>
+        </div>
+
+        <div class="form-group">
+          <input type="text" id="cpfLogin" class="form-input" placeholder="000.000.000-00" />
+        </div>
+
+        <button id="btnBuscar" class="btn btn-primary">
+          <i class="fas fa-search"></i>Buscar Cadastro
+        </button>
+        
+        <button id="btnCadastro" class="btn btn-success">
+          <i class="fas fa-user-plus"></i>Cadastre-se
+        </button>
+        
+        <div id="msgErro" class="mensagem erro hidden"></div>
+      </div>
+
+      <form id="formEvento" class="hidden">
+        <h2 class="section-title">
+          <i class="fas fa-edit"></i>Formulário de Inscrição
+        </h2>
+
+        <div class="form-group">
+          <label class="form-label">Nome completo</label>
+          <input type="text" id="nome" name="NomeCompleto" class="form-input" readonly />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">CPF</label>
+          <input type="text" id="cpf" name="CPF" class="form-input" readonly />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">RG</label>
+          <input type="text" id="rg" name="RG" class="form-input" readonly />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">WhatsApp</label>
+          <input type="tel" id="telefone" name="Telefone" class="form-input" readonly />
+        </div>
+
+        <hr class="divider">
+
+        <div class="form-group">
+          <p style="margin-bottom: 15px;">
+            A cerimônia possui número limitado de vagas.<br>
+            Caso as vagas já estejam preenchidas, sua inscrição será colocada na lista de espera.
+          </p>
+
+          <div class="checkbox-line">
+            <input type="checkbox" id="termoCiencia" name="Status" value="Confirmado" required />
+            <label for="termoCiencia" class="required">Estou ciente e desejo me inscrever na Cerimônia.</label>
+          </div>
+
+          <div class="checkbox-line">
+            <input type="checkbox" id="cienteListaEspera" name="CienteListaEspera" value="Sim" />
+            <label for="cienteListaEspera">Estou ciente que eu possa estar na lista de espera.</label>
+          </div>
+
+          <p style="margin: 20px 0 10px 0; font-weight: 600;">Selecione sua condição de consagração:</p>
+          
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" id="jaConsagrei" name="JaConsagrei" value="Sim" required />
+              <span>Já consagrei a medicina da Ayahuasca (R$60,00)</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" id="primeiraVez" name="JaConsagrei" value="Não" required />
+              <span>Minha primeira vez consagrando (Gratuito)</span>
+            </label>
+          </div>
+        </div>
+
+        <p style="text-align: center; margin: 20px 0; color: var(--text-light);">
+          (Verifique a mensagem com o status de Inscrição abaixo)
+        </p>
+
+        <button type="submit" id="btnSubmit" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i>Confirmar Inscrição
+        </button>
+        
+        <button type="button" id="btnNovaInscricao" class="btn btn-info hidden">
+          <i class="fas fa-redo"></i>Fazer Nova Inscrição
+        </button>
+        
+        <div id="mensagem" class="mensagem hidden"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzsML4G52giKj_XGW-4Iu-n8YMocKMTpDfrIcmTOEz6vq0vyrj5-e2JkV2e62wGgZyqaw/exec";
+    const eventoNome = "Evento2";
+
+    const cpfLogin = document.getElementById("cpfLogin");
+    const btnBuscar = document.getElementById("btnBuscar");
+    const btnCadastro = document.getElementById("btnCadastro");
+    const msgErro = document.getElementById("msgErro");
+    const formEvento = document.getElementById("formEvento");
+    const mensagem = document.getElementById("mensagem");
+    const btnSubmit = document.getElementById("btnSubmit");
+    const btnNovaInscricao = document.getElementById("btnNovaInscricao");
+
+    // Formatação do CPF no login
+    cpfLogin.addEventListener("input", function(e) {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value.length <= 11) {
+        value = value.replace(/(\d{3})(\d)/, "$1.$2");
+        value = value.replace(/(\d{3})(\d)/, "$1.$2");
+        value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      }
+      e.target.value = value;
+    });
+
+    btnCadastro.addEventListener("click", () => {
+      window.location.href = "https://flaviocoen.github.io/misteriodajiboia/cadastro.html";
+    });
+
+    btnBuscar.addEventListener("click", async () => {
+      msgErro.classList.add("hidden");
+      const cpf = cpfLogin.value.replace(/\D/g, "");
+      
+      if (!cpf) {
+        msgErro.textContent = "Digite um CPF válido.";
+        msgErro.classList.remove("hidden");
+        return;
+      }
+
+      // Adiciona loading no botão
+      btnBuscar.disabled = true;
+      btnBuscar.classList.add("btn-loading");
+      btnBuscar.innerHTML = '<i class="fas fa-search"></i> Buscando...';
+
+      try {
+        const resp = await fetch(`${scriptURL}?acao=evento&cpf=${cpf}`);
+        const data = await resp.json();
+
+        if (data.erro) {
+          msgErro.textContent = "CPF não encontrado. Clique em 'Cadastre-se' para se registrar.";
+          msgErro.classList.remove("hidden");
+        } else {
+          document.getElementById("nome").value = data.nome || "";
+          document.getElementById("cpf").value = data.cpf || "";
+          document.getElementById("rg").value = data.rg || "";
+          document.getElementById("telefone").value = data.telefone || "";
+
+          document.getElementById("login").classList.add("hidden");
+          formEvento.classList.remove("hidden");
+        }
+
+      } catch (err) {
+        msgErro.textContent = "Erro ao buscar: " + err.message;
+        msgErro.classList.remove("hidden");
+      } finally {
+        // Remove loading independente do resultado
+        btnBuscar.disabled = false;
+        btnBuscar.classList.remove("btn-loading");
+        btnBuscar.innerHTML = '<i class="fas fa-search"></i> Buscar Cadastro';
+      }
+    });
+
+    formEvento.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      mensagem.classList.add("hidden");
+
+      const termo = document.getElementById("termoCiencia");
+      const consagracao = document.querySelector('input[name="JaConsagrei"]:checked');
+
+      if (!termo.checked || !consagracao) {
+        mensagem.textContent = "⚠️ Marque todos os campos obrigatórios antes de enviar.";
+        mensagem.className = "mensagem erro";
+        mensagem.classList.remove("hidden");
+        return;
+      }
+
+      // Desabilita o botão imediatamente
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+
+      const formData = new FormData();
+      formData.append("acao", "evento");
+      formData.append("evento", eventoNome);
+      formData.append("NomeCompleto", document.getElementById("nome").value || "");
+      formData.append("CPF", document.getElementById("cpf").value || "");
+      formData.append("RG", document.getElementById("rg").value || "");
+      formData.append("Telefone", document.getElementById("telefone").value || "");
+      formData.append("Status", termo.checked ? termo.value : "");
+      const listaChk = document.getElementById("cienteListaEspera");
+      formData.append("CienteListaEspera", (listaChk && listaChk.checked) ? listaChk.value : "Não");
+      formData.append("JaConsagrei", consagracao.value);
+      formData.append("PrimeiraVez", consagracao.value === "Sim" ? "Não" : "Sim");
+
+      try {
+        const resp = await fetch(scriptURL, { method: "POST", body: formData });
+        const txt = await resp.text();
+
+        // Mensagens mais claras e específicas
+        if (txt && txt.includes("Lista de Espera")) {
+          mensagem.textContent = "🎯 VOCÊ ESTÁ NA LISTA DE ESPERA! Entraremos em contato por WhatsApp se surgir vaga.";
+        } else {
+          mensagem.textContent = "🎉 INSCRIÇÃO CONFIRMADA! Aguarde nossas instruções por WhatsApp em breve.";
+        }
+
+        mensagem.className = "mensagem sucesso";
+        mensagem.classList.remove("hidden");
+
+        // Mantém o botão desabilitado com texto alterado
+        btnSubmit.innerHTML = '<i class="fas fa-check"></i> Inscrição Enviada';
+        btnNovaInscricao.classList.remove("hidden");
+
+        // Limpa apenas os campos do formulário (mantém dados pessoais)
+        document.getElementById("termoCiencia").checked = false;
+        if (listaChk) listaChk.checked = false;
+        const radios = document.querySelectorAll('input[name="JaConsagrei"]');
+        radios.forEach(radio => radio.checked = false);
+        
+      } catch (err) {
+        // Reabilita o botão em caso de erro
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Confirmar Inscrição';
+        
+        mensagem.textContent = "❌ Erro: " + err.message;
+        mensagem.className = "mensagem erro";
+        mensagem.classList.remove("hidden");
+      }
+    });
+
+    // Botão para nova inscrição
+    btnNovaInscricao.addEventListener("click", () => {
+      // Limpa o CPF do login e volta para o início
+      cpfLogin.value = "";
+      formEvento.classList.add("hidden");
+      btnNovaInscricao.classList.add("hidden");
+      document.getElementById("login").classList.remove("hidden");
+      
+      // Reseta o botão de submit
+      btnSubmit.disabled = false;
+      btnSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Confirmar Inscrição';
+      
+      // Limpa mensagens
+      mensagem.classList.add("hidden");
+      msgErro.classList.add("hidden");
+    });
+  </script>
+</body>
+
+</html>
