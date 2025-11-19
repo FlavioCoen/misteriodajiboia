@@ -99,6 +99,13 @@
             text-decoration: underline;
             color: #128C7E;
         }
+        .event-select-container {
+            margin-bottom: 20px;
+        }
+        .event-select-container label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -106,7 +113,6 @@
     <div id="loginScreen" class="login-container">
         <h2>🔐 Área Administrativa</h2>
         <div id="loginError" class="error" style="display: none;"></div>
-        <!-- campos vazios conforme pediu -->
         <input type="text" id="usuario" placeholder="Usuário">
         <input type="password" id="senha" placeholder="Senha">
         <button onclick="fazerLogin()">Entrar</button>
@@ -115,24 +121,31 @@
     <!-- Tela Administrativa -->
     <div id="adminScreen" class="admin-container hidden">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h1>📋 Lista de Inscrições - Evento 2</h1>
+            <h1>📋 Lista de Inscrições</h1>
             <button class="logout-btn" onclick="fazerLogout()">Sair</button>
         </div>
-        
+
+        <!-- Menu de Eventos -->
+        <div class="event-select-container">
+            <label for="selecionarEvento">Selecionar Evento:</label>
+            <select id="selecionarEvento" onchange="carregarDados()">
+                <option value="Evento1">Evento 1</option>
+                <option value="Evento2">Evento 2</option>
+                <option value="Evento3">Evento 3</option>
+                <option value="Evento4">Evento 4</option>
+            </select>
+        </div>
+
         <div id="loading" class="loading">Carregando dados...</div>
         <div id="tabela"></div>
     </div>
 
     <script>
-        // SUA URL
-        const URL = "https://script.google.com/macros/s/AKfycbwhhW58YgdiowQ-R9zb8t5X3ZXs4lW6oo0xM5zptQCHTq5U4vvCQqEsb9TAQfiMc8JfeQ/exec";
+        // URL do WebApp (novo)
+        const URL = "https://script.google.com/macros/s/AKfycbz4tBs36YSU_pi4uebjIGJbLz5BqPHvKLtsg1Pua5EeQ5HdXEG-vRFLCDx59bMWtzRy/exec";
 
-        // -----------------------------
-        // CREDENCIAIS OCULTAS (BASE64)
-        // Este valor corresponde a "admin:123456789"
-        // -----------------------------
+        // Credenciais base64 ("admin:123456789")
         const CREDENCIAIS_BASE64 = "YWRtaW46MTIzNDU2Nzg5";
-        // -----------------------------
 
         function decodeCredenciais(b64) {
             try {
@@ -172,20 +185,7 @@
         }
 
         function criarMensagemPersonalizada(nome, status) {
-            return `Olá ${nome}.
-
-Seu cadastro para a cerimônia foi realizado com sucesso 🌸.
-
-Seu status atual é: ${status}.
-
-As vagas são preenchidas por ordem de inscrição.
-Caso seu status esteja em Fila de Espera, significa que já estamos com as vagas esgotadas.
-
-Se alguém desistir, você poderá participar e será avisado com antecedência.
-
-Agradecemos de coração por sua presença e confiança 💚.
-
-Caso precise de mais informações, estamos à disposição.`;
+            return `Olá ${nome}.\n\nSeu cadastro para a cerimônia foi realizado com sucesso 🌸.\n\nSeu status atual é: ${status}.\n\nAs vagas são preenchidas por ordem de inscrição.\nCaso seu status esteja em Fila de Espera, significa que já estamos com as vagas esgotadas.\n\nSe alguém desistir, você poderá participar e será avisado com antecedência.\n\nAgradecemos de coração por sua presença e confiança 💚.\n\nCaso precise de mais informações, estamos à disposição.`;
         }
 
         function criarLinkWhatsApp(telefone, nome, status) {
@@ -201,7 +201,13 @@ Caso precise de mais informações, estamos à disposição.`;
         }
 
         function carregarDados() {
-            fetch(URL)
+            const eventoSelecionado = document.getElementById('selecionarEvento').value;
+            const urlCompleta = `${URL}?sheet=${eventoSelecionado}`;
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('tabela').innerHTML = '';
+
+            fetch(urlCompleta)
                 .then(response => {
                     if (!response.ok) throw new Error('Erro na resposta do servidor');
                     return response.json();
