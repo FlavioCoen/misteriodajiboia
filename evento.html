@@ -1,253 +1,645 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Área Administrativa</title>
-    <style>
-        body { 
-            font-family: Arial; 
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            text-align: center;
-        }
-        .admin-container {
-            max-width: 1200px;
-            margin: 20px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        .hidden {
-            display: none;
-        }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #2E8B57;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background: #26734a;
-        }
-        .logout-btn {
-            background: #dc3545;
-            width: auto;
-            padding: 8px 15px;
-            float: right;
-        }
-        .logout-btn:hover {
-            background: #c82333;
-        }
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 20px; 
-        }
-        th, td { 
-            border: 1px solid #ddd; 
-            padding: 10px; 
-            text-align: left; 
-        }
-        th { 
-            background-color: #2E8B57; 
-            color: white; 
-        }
-        tr:nth-child(even) { 
-            background-color: #f9f9f9; 
-        }
-        .loading { 
-            padding: 40px; 
-            text-align: center; 
-            font-size: 18px; 
-            color: #666; 
-        }
-        .error {
-            color: red;
-            text-align: center;
-            margin: 10px 0;
-        }
-        .whatsapp-link {
-            color: #25D366;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .whatsapp-link:hover {
-            text-decoration: underline;
-            color: #128C7E;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Eventos - Instituto Xamânico Mistério da Jibóia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #2E8B57;
+      --primary-dark: #26734a;
+      --secondary: #8B4513;
+      --accent: #FFD700;
+      --text: #2C3E50;
+      --text-light: #7F8C8D;
+      --background: #F8F9FA;
+      --white: #FFFFFF;
+      --border: #E1E8ED;
+      --success: #27AE60;
+      --warning: #F39C12;
+      --error: #E74C3C;
+      --shadow: 0 4px 20px rgba(0,0,0,0.1);
+      --radius: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: 
+        linear-gradient(rgba(27, 94, 32, 0.85), rgba(46, 125, 50, 0.85)),
+        url('https://images.unsplash.com/photo-1661923031414-04772921470e?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE0fHx8ZW58MHx8fHx8') center/cover fixed;
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: var(--white);
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--white);
+      text-decoration: none;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.15);
+      border-radius: var(--radius);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .back-button:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateX(-5px);
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .event-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      position: relative;
+    }
+
+    /* EVENTO ATIVO - Totalmente funcional */
+    .event-card.active {
+      border-color: var(--primary);
+    }
+
+    .event-card.active:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    }
+
+    /* EVENTO INATIVO - Transparente e não clicável */
+    .event-card.inactive {
+      opacity: 0.6;
+      filter: grayscale(30%);
+    }
+
+    .event-card.inactive:hover {
+      transform: none;
+      cursor: not-allowed;
+    }
+
+    .event-card.inactive::before {
+      content: "Evento Indisponível";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      font-weight: bold;
+      z-index: 10;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .event-card.inactive .btn {
+      pointer-events: none;
+    }
+
+    .event-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white);
+      padding: 25px;
+      text-align: center;
+    }
+
+    .event-card.inactive .event-header {
+      background: linear-gradient(135deg, #7F8C8D, #95a5a6);
+    }
+
+    .event-header h3 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+
+    .event-date {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.2);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+    }
+
+    .event-body {
+      padding: 25px;
+    }
+
+    .event-info {
+      margin-bottom: 20px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      color: var(--text-light);
+    }
+
+    .info-item i {
+      color: var(--primary);
+      width: 20px;
+    }
+
+    .event-description {
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .event-features {
+      margin-bottom: 25px;
+    }
+
+    .feature-list {
+      list-style: none;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      padding: 8px 0;
+    }
+
+    .feature-list li::before {
+      content: "✓";
+      color: var(--success);
+      font-weight: bold;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 32px;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      width: 100%;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(46, 139, 87, 0.3);
+    }
+
+    .btn-disabled {
+      background: var(--text-light);
+      color: var(--white);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .btn-disabled:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .event-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .status-open {
+      background: rgba(39, 174, 96, 0.1);
+      color: var(--success);
+      border: 1px solid var(--success);
+    }
+
+    .status-closed {
+      background: rgba(231, 76, 60, 0.1);
+      color: var(--error);
+      border: 1px solid var(--error);
+    }
+
+    .contribution-info {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: rgba(46, 139, 87, 0.05);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .contribution-amount {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .contribution-details {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .free-note {
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      color: #2C3E50;
+      padding: 10px 15px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .highlight {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .time-info {
+      background: rgba(243, 156, 18, 0.05);
+      padding: 15px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(243, 156, 18, 0.2);
+      margin-bottom: 20px;
+    }
+
+    .time-item {
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .events-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .event-header {
+        padding: 20px;
+      }
+
+      .event-body {
+        padding: 20px;
+      }
+      
+      body {
+        background-attachment: scroll;
+      }
+
+      .event-card.inactive::before {
+        font-size: 0.8rem;
+        padding: 8px 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .event-header h3 {
+        font-size: 1.2rem;
+      }
+
+      .btn {
+        padding: 14px 24px;
+      }
+    }
+
+    /* Animações */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .event-card {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    .event-card:nth-child(2) { animation-delay: 0.1s; }
+    .event-card:nth-child(3) { animation-delay: 0.2s; }
+    .event-card:nth-child(4) { animation-delay: 0.3s; }
+  </style>
 </head>
+
 <body>
-    <!-- Tela de Login -->
-    <div id="loginScreen" class="login-container">
-        <h2>🔐 Área Administrativa</h2>
-        <div id="loginError" class="error" style="display: none;"></div>
-        <!-- campos vazios conforme pediu -->
-        <input type="text" id="usuario" placeholder="Usuário">
-        <input type="password" id="senha" placeholder="Senha">
-        <button onclick="fazerLogin()">Entrar</button>
+  <div class="container">
+    <a href="cadastro.html" class="back-button">
+      <i class="fas fa-arrow-left"></i>Voltar para Cadastro
+    </a>
+
+    <div class="header">
+      <h1><i class="fas fa-calendar-alt"></i> Nossos Eventos</h1>
+      <p>Escolha o evento que deseja participar</p>
     </div>
 
-    <!-- Tela Administrativa -->
-    <div id="adminScreen" class="admin-container hidden">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h1>📋 Lista de Inscrições - Evento 1</h1>
-            <button class="logout-btn" onclick="fazerLogout()">Sair</button>
+    <div class="events-grid">
+      <!-- Evento 1 -->
+      <div class="event-card active"> <!-- ALTERE AQUI: active ou inactive -->
+        <div class="event-header">
+          <h3>Cerimônia Xamânica de Lua Cheia</h3>
+          <div class="event-date">
+            <i class="fas fa-calendar"></i>15 de Dezembro, 2024
+          </div>
         </div>
-        
-        <div id="loading" class="loading">Carregando dados...</div>
-        <div id="tabela"></div>
+        <div class="event-body">
+          <div class="event-status status-open">
+            <i class="fas fa-check-circle"></i>Evento Aberto
+          </div>
+          
+          <div class="contribution-info">
+            <div class="contribution-amount">Contribuição de: <span class="highlight">R$ 60,00</span></div>
+            <div class="contribution-details">
+              <span class="highlight">Pix: 11 98375-5292</span><br>
+              Flávio Martins Coen<br>
+              <span class="highlight">(Enviar Comprovante)</span>
+            </div>
+            <div class="free-note">
+              Gratuito para sua primeira consagração 😀
+            </div>
+          </div>
+
+          <div class="time-info">
+            <div class="time-item"><span class="highlight">Horário de chegada:</span> 15h00</div>
+            <div class="time-item"><span class="highlight">Horário de Início:</span> 16h00</div>
+            <div class="time-item"><span class="highlight">Tempo de Ritual:</span> 04h00</div>
+          </div>
+
+          <div class="event-info">
+            <div class="info-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>R. Francisco Marengo, 745 - Tatuapé - São Paulo - SP, 03313-000</span>
+            </div>
+          </div>
+
+          <div class="event-description">
+            Cerimônia especial de Lua Cheia com foco em cura e renovação. Trabalho com a medicina sagrada Ayahuasca em ambiente seguro e acolhedor.
+          </div>
+
+          <div class="event-features">
+            <ul class="feature-list">
+              <li>Preparação espiritual pré-cerimônia</li>
+              <li>Ambiente seguro e acolhedor</li>
+              <li>Suporte de experienced guides</li>
+              <li>Alimentação vegetariana inclusa</li>
+            </ul>
+          </div>
+
+          <a href="https://flaviocoen.github.io/misteriodajiboia/evento1.html" class="btn btn-primary">
+            <i class="fas fa-sign-in-alt"></i>Inscrever-se neste Evento
+          </a>
+        </div>
+      </div>
+
+      <!-- Evento 2 -->
+      <div class="event-card inactive"> <!-- ALTERE AQUI: active ou inactive -->
+        <div class="event-header">
+          <h3>Retiro de 3 Dias - Cura Profunda</h3>
+          <div class="event-date">
+            <i class="fas fa-calendar"></i>10-12 de Janeiro, 2025
+          </div>
+        </div>
+        <div class="event-body">
+          <div class="event-status status-closed">
+            <i class="fas fa-times-circle"></i>Evento Indisponível
+          </div>
+          
+          <div class="contribution-info">
+            <div class="contribution-amount">Contribuição de: <span class="highlight">R$ 60,00</span></div>
+            <div class="contribution-details">
+              <span class="highlight">Pix: 11 98375-5292</span><br>
+              Flávio Martins Coen<br>
+              <span class="highlight">(Enviar Comprovante)</span>
+            </div>
+            <div class="free-note">
+              Gratuito para sua primeira consagração 😀
+            </div>
+          </div>
+
+          <div class="time-info">
+            <div class="time-item"><span class="highlight">Horário de chegada:</span> 15h00</div>
+            <div class="time-item"><span class="highlight">Horário de Início:</span> 16h00</div>
+            <div class="time-item"><span class="highlight">Tempo de Ritual:</span> 04h00</div>
+          </div>
+
+          <div class="event-info">
+            <div class="info-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>R. Francisco Marengo, 745 - Tatuapé - São Paulo - SP, 03313-000</span>
+            </div>
+          </div>
+
+          <div class="event-description">
+            Retiro imersivo de 3 dias com 2 cerimônias, workshops de autoconhecimento, práticas de yoga e integração em grupo.
+          </div>
+
+          <div class="event-features">
+            <ul class="feature-list">
+              <li>2 cerimônias de Ayahuasca</li>
+              <li>Workshops de autoconhecimento</li>
+              <li>Práticas de yoga e meditação</li>
+              <li>Acomodação e alimentação inclusas</li>
+              <li>Sessões de integração em grupo</li>
+            </ul>
+          </div>
+
+          <a href="https://flaviocoen.github.io/misteriodajiboia/evento2.html" class="btn btn-disabled">
+            <i class="fas fa-times-circle"></i>Evento Indisponível
+          </a>
+        </div>
+      </div>
+
+      <!-- Evento 3 -->
+      <div class="event-card inactive"> <!-- ALTERE AQUI: active ou inactive -->
+        <div class="event-header">
+          <h3>Workshop de Plantas Medicinais</h3>
+          <div class="event-date">
+            <i class="fas fa-calendar"></i>25 de Janeiro, 2025
+          </div>
+        </div>
+        <div class="event-body">
+          <div class="event-status status-closed">
+            <i class="fas fa-times-circle"></i>Evento Indisponível
+          </div>
+          
+          <div class="contribution-info">
+            <div class="contribution-amount">Contribuição de: <span class="highlight">R$ 60,00</span></div>
+            <div class="contribution-details">
+              <span class="highlight">Pix: 11 98375-5292</span><br>
+              Flávio Martins Coen<br>
+              <span class="highlight">(Enviar Comprovante)</span>
+            </div>
+            <div class="free-note">
+              Gratuito para sua primeira consagração 😀
+            </div>
+          </div>
+
+          <div class="time-info">
+            <div class="time-item"><span class="highlight">Horário de chegada:</span> 15h00</div>
+            <div class="time-item"><span class="highlight">Horário de Início:</span> 16h00</div>
+            <div class="time-item"><span class="highlight">Tempo de Ritual:</span> 04h00</div>
+          </div>
+
+          <div class="event-info">
+            <div class="info-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>R. Francisco Marengo, 745 - Tatuapé - São Paulo - SP, 03313-000</span>
+            </div>
+          </div>
+
+          <div class="event-description">
+            Workshop teórico sobre plantas medicinais da Mata Atlântica, seus usos tradicionais e propriedades curativas.
+          </div>
+
+          <div class="event-features">
+            <ul class="feature-list">
+              <li>Conhecimento tradicional</li>
+              <li>Identificação de plantas</li>
+              <li>Preparações medicinais</li>
+              <li>Material didático incluso</li>
+              <li>Certificado de participação</li>
+            </ul>
+          </div>
+
+          <a href="https://flaviocoen.github.io/misteriodajiboia/evento3.html" class="btn btn-disabled">
+            <i class="fas fa-times-circle"></i>Evento Indisponível
+          </a>
+        </div>
+      </div>
+
+      <!-- Evento 4 -->
+      <div class="event-card inactive"> <!-- ALTERE AQUI: active ou inactive -->
+        <div class="event-header">
+          <h3>Cerimônia de Solstício de Verão</h3>
+          <div class="event-date">
+            <i class="fas fa-calendar"></i>21 de Dezembro, 2024
+          </div>
+        </div>
+        <div class="event-body">
+          <div class="event-status status-closed">
+            <i class="fas fa-times-circle"></i>Evento Indisponível
+          </div>
+          
+          <div class="contribution-info">
+            <div class="contribution-amount">Contribuição de: <span class="highlight">R$ 60,00</span></div>
+            <div class="contribution-details">
+              <span class="highlight">Pix: 11 98375-5292</span><br>
+              Flávio Martins Coen<br>
+              <span class="highlight">(Enviar Comprovante)</span>
+            </div>
+            <div class="free-note">
+              Gratuito para sua primeira consagração 😀
+            </div>
+          </div>
+
+          <div class="time-info">
+            <div class="time-item"><span class="highlight">Horário de chegada:</span> 15h00</div>
+            <div class="time-item"><span class="highlight">Horário de Início:</span> 16h00</div>
+            <div class="time-item"><span class="highlight">Tempo de Ritual:</span> 04h00</div>
+          </div>
+
+          <div class="event-info">
+            <div class="info-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>R. Francisco Marengo, 745 - Tatuapé - São Paulo - SP, 03313-000</span>
+            </div>
+          </div>
+
+          <div class="event-description">
+            Cerimônia especial de Solstício celebrando a renovação e os novos ciclos. Trabalho profundo de autoconhecimento e cura.
+          </div>
+
+          <div class="event-features">
+            <ul class="feature-list">
+              <li>Cerimônia especial de Solstício</li>
+              <li>Rituais de renovação energética</li>
+              <li>Trabalhos com os 4 elementos</li>
+              <li>Alimentação vegetariana inclusa</li>
+              <li>Fogueira sagrada</li>
+            </ul>
+          </div>
+
+          <a href="https://flaviocoen.github.io/misteriodajiboia/evento4.html" class="btn btn-disabled">
+            <i class="fas fa-times-circle"></i>Evento Indisponível
+          </a>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // SUA URL
-        const URL = "https://script.google.com/macros/s/AKfycbwhhW58YgdiowQ-R9zb8t5X3ZXs4lW6oo0xM5zptQCHTq5U4vvCQqEsb9TAQfiMc8JfeQ/exec";
-
-        // -----------------------------
-        // CREDENCIAIS OCULTAS (BASE64)
-        // Este valor corresponde a "admin:123456789"
-        // -----------------------------
-        const CREDENCIAIS_BASE64 = "YWRtaW46MTIzNDU2Nzg5";
-        // -----------------------------
-
-        function decodeCredenciais(b64) {
-            try {
-                const decoded = atob(b64);
-                const parts = decoded.split(':');
-                return { usuario: parts[0] || '', senha: parts[1] || '' };
-            } catch (e) {
-                console.error('Erro ao decodificar credenciais:', e);
-                return { usuario: '', senha: '' };
-            }
-        }
-
-        const { usuario: USUARIO_CORRETO, senha: SENHA_CORRETA } = decodeCredenciais(CREDENCIAIS_BASE64);
-
-        function fazerLogin() {
-            const usuario = document.getElementById('usuario').value.trim();
-            const senha = document.getElementById('senha').value.trim();
-            const errorDiv = document.getElementById('loginError');
-
-            if (usuario === USUARIO_CORRETO && senha === SENHA_CORRETA) {
-                document.getElementById('loginScreen').classList.add('hidden');
-                document.getElementById('adminScreen').classList.remove('hidden');
-                carregarDados();
-            } else {
-                errorDiv.style.display = 'block';
-                errorDiv.textContent = 'Usuário ou senha incorretos!';
-            }
-        }
-
-        function fazerLogout() {
-            document.getElementById('adminScreen').classList.add('hidden');
-            document.getElementById('loginScreen').classList.remove('hidden');
-            document.getElementById('usuario').value = '';
-            document.getElementById('senha').value = '';
-            document.getElementById('loginError').style.display = 'none';
-            document.getElementById('tabela').innerHTML = '';
-        }
-
-        function criarMensagemPersonalizada(nome, status) {
-            return `Olá ${nome}.
-
-Seu cadastro para a cerimônia foi realizado com sucesso 🌸.
-
-Seu status atual é: ${status}.
-
-As vagas são preenchidas por ordem de inscrição.
-Caso seu status esteja em Fila de Espera, significa que já estamos com as vagas esgotadas.
-
-Se alguém desistir, você poderá participar e será avisado com antecedência.
-
-Agradecemos de coração por sua presença e confiança 💚.
-
-Caso precise de mais informações, estamos à disposição.`;
-        }
-
-        function criarLinkWhatsApp(telefone, nome, status) {
-            if (!telefone) return telefone || '';
-            const numeroLimpo = telefone.toString().replace(/\D/g, '');
-            if (numeroLimpo.length === 10 || numeroLimpo.length === 11) {
-                const numeroFormatado = '55' + numeroLimpo;
-                const mensagem = criarMensagemPersonalizada(nome, status);
-                const url = `https://wa.me/${numeroFormatado}?text=${encodeURIComponent(mensagem)}`;
-                return `<a href="${url}" target="_blank" class="whatsapp-link" title="Abrir WhatsApp">${telefone} 📱</a>`;
-            }
-            return telefone;
-        }
-
-        function carregarDados() {
-            fetch(URL)
-                .then(response => {
-                    if (!response.ok) throw new Error('Erro na resposta do servidor');
-                    return response.json();
-                })
-                .then(dados => {
-                    document.getElementById('loading').style.display = 'none';
-                    if (!dados || dados.length === 0) {
-                        document.getElementById('tabela').innerHTML = '<p>Nenhuma inscrição encontrada</p>';
-                        return;
-                    }
-                    let html = '<table>';
-                    html += `
-                        <tr>
-                            <th>Data</th>
-                            <th>Nome Completo</th>
-                            <th>CPF</th>
-                            <th>Telefone</th>
-                            <th>Status</th>
-                            <th>Já Consagrou</th>
-                        </tr>`;
-                    dados.forEach(pessoa => {
-                        const data = pessoa.DataCadastro ? new Date(pessoa.DataCadastro).toLocaleString('pt-BR') : '';
-                        html += `
-                            <tr>
-                                <td>${data}</td>
-                                <td><strong>${pessoa.NomeCompleto || ''}</strong></td>
-                                <td>${pessoa.CPF || ''}</td>
-                                <td>${criarLinkWhatsApp(pessoa.Telefone, pessoa.NomeCompleto, pessoa.Status)}</td>
-                                <td>${pessoa.Status || ''}</td>
-                                <td>${pessoa.JaConsagrei || 'Não'}</td>
-                            </tr>`;
-                    });
-                    html += '</table>';
-                    document.getElementById('tabela').innerHTML = html;
-                })
-                .catch(error => {
-                    console.error('Erro completo:', error);
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('tabela').innerHTML = '<p style="color:red; padding:20px; text-align:center;">Erro ao carregar dados.</p>';
-                });
-        }
-
-        // Enter para fazer login
-        document.getElementById('senha').addEventListener('keypress', e => {
-            if (e.key === 'Enter') fazerLogin();
-        });
-    </script>
+  <script>
+    // Simples e direto - sem conexão com planilha
+    console.log("Página de eventos carregada com sucesso!");
+  </script>
 </body>
 </html>
