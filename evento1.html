@@ -738,7 +738,7 @@
       const formData = new FormData();
       formData.append("acao", "evento");
       formData.append("evento", eventoNome);
-      formData.append("sheetName", "Evento1"); // ← LINHA ADICIONADA PARA GRAVAR NA ABA CORRETA
+      formData.append("sheetName", "Evento1");
       formData.append("NomeCompleto", document.getElementById("nome").value || "");
       formData.append("CPF", document.getElementById("cpf").value || "");
       formData.append("RG", document.getElementById("rg").value || "");
@@ -754,10 +754,11 @@
         const resp = await fetch(scriptURL, { method: "POST", body: formData });
         const txt = await resp.text();
 
-        if (txt && txt.includes("Lista de Espera")) {
-          mensagem.textContent = "🎯 VOCÊ ESTÁ NA LISTA DE ESPERA!";
+        // ⬇️⬇️⬇️ VERIFICA BASEADO NA MENSAGEM DO APPS SCRIPT ⬇️⬇️⬇️
+        if (txt && txt.toLowerCase().includes("lista de espera")) {
+          mensagem.textContent = "🎯 INSCRIÇÕES ESGOTADAS VOCÊ ENTROU NA LISTA DE ESPERA!";
         } else {
-          mensagem.textContent = "🎉 INSCRIÇÃO CONFIRMADA!";
+          mensagem.textContent = "🎉 GRATIDÃO SUA INSCRIÇÃO FOI CONFIRMADA!";
         }
 
         mensagem.className = "mensagem sucesso";
