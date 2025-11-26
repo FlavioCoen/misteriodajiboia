@@ -395,17 +395,18 @@
       <div id="login">
         <div id="infoEvento">
           <h2 class="section-title">
-            <i class="fas fa-heart"></i>Cerimônia Pachamama, Mãe Terra - Gaia (Segundo Lote)
+            <i class="fas fa-heart"></i>Cerimônia Pachamama, Mãe Terra - Gaia
           </h2>
           
           <div class="info-section">
-       <p><strong>Queridos irmãos e irmãs,</strong></p>
-<p>Há dentro de cada um de nós uma conexão ancestral com a Pachamama, a Mãe Terra que nos nutre, sustenta e abraça em seu ciclo infinito de vida. Ela é o solo que pisamos, o ar que respiramos e a essência que pulsa em nosso ser.</p>
-<p>Este encontro é um convite para reconectar com essa força primordial, para sentir em nosso corpo a sabedoria dos elementos e honrar a divindade que habita em toda a natureza, inclusive dentro de nós.</p>
-<p>Cuidar da nossa relação com a Pachamama é lembrar que somos parte de um todo sagrado, onde cada ser, cada planta, cada ciclo tem seu propósito e beleza.</p>
-<p>É perceber que a abundância que buscamos no mundo exterior começa com a fertilidade do nosso mundo interior, com a gratidão por cada respiração e cada batimento do coração.</p>
-<p>Conectar-se com a Mãe Terra é sincronizar nossos ritmos com os ciclos naturais, é permitir que a energia circular da vida flua através de nós, trazendo cura, equilíbrio e plenitude.</p>
-<p>Venha com o coração aberto para receber os ensinamentos da Terra. A Pachamama espera por você com seus braços acolhedores, pronta para nutrir sua alma e reconectar você com a essência sagrada da vida.</p>
+            <p><strong>Queridos irmãos e irmãs,</strong></p>
+            <p>Há dentro de cada um de nós uma conexão ancestral com a Pachamama, a Mãe Terra que nos nutre, sustenta e abraça em seu ciclo infinito de vida. Ela é o solo que pisamos, o ar que respiramos e a essência que pulsa em nosso ser.</p>
+            <p>Este encontro é um convite para reconectar com essa força primordial, para sentir em nosso corpo a sabedoria dos elementos e honrar a divindade que habita em toda a natureza, inclusive dentro de nós.</p>
+            <p>Cuidar da nossa relação com a Pachamama é lembrar que somos parte de um todo sagrado, onde cada ser, cada planta, cada ciclo tem seu propósito e beleza.</p>
+            <p>É perceber que a abundância que buscamos no mundo exterior começa com a fertilidade do nosso mundo interior, com a gratidão por cada respiração e cada batimento do coração.</p>
+            <p>Conectar-se com a Mãe Terra é sincronizar nossos ritmos com os ciclos naturais, é permitir que a energia circular da vida flua através de nós, trazendo cura, equilíbrio e plenitude.</p>
+            <p>Venha com o coração aberto para receber os ensinamentos da Terra. A Pachamama espera por você com seus braços acolhedores, pronta para nutrir sua alma e reconectar você com a essência sagrada da vida.</p>
+          </div>
 
           <hr class="divider">
           
@@ -413,14 +414,14 @@
             <i class="fas fa-calendar-alt"></i>Informações do Encontro
           </h3>
           <div class="info-section">
-            <p><strong>Data:</strong> 21 de Dezembro de 2025</p>
+            <p><strong>Data:</strong> 07 de Dezembro de 2025</p>
             <p><strong>Horário de chegada:</strong> 15h00<br>
             <strong>Horário de início:</strong> 16h00<br>
             <strong>Tempo de ritual:</strong> 04h00</p>
             <p><em>É necessário fazer a última refeição três horas antes do início do ritual.</em></p>
             
             <p><strong>Contribuição:</strong> R$ 60,00<br>
-            <strong>Pix:</strong> 264.001.088-31<br>
+            <strong>Pix:</strong> 11 98375-5292<br>
             <strong>CPF:</strong> Flávio Martins Coen (Enviar comprovante)<br>
             <em><strong>Gratuito para sua primeira consagração</strong> 😀</em></p>
           </div>
@@ -594,7 +595,7 @@
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzsML4G52giKj_XGW-4Iu-n8YMocKMTpDfrIcmTOEz6vq0vyrj5-e2JkV2e62wGgZyqaw/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwm5qLNUC3OvkS9F6zG3uJSBI_HzZSnZ4DsSKd5YnDQ9zr-btYs7WAUG5vw6GqZc0RQvg/exec";
     const eventoNome = "Evento3";
 
     const cpfLogin = document.getElementById("cpfLogin");
@@ -623,41 +624,94 @@
 
     btnBuscar.addEventListener("click", async () => {
       msgErro.classList.add("hidden");
-      const cpf = cpfLogin.value.replace(/\D/g, "");
+      let cpf = cpfLogin.value.replace(/\D/g, "");
       
-      if (!cpf) {
-        msgErro.textContent = "Digite um CPF válido.";
+      if (!cpf || cpf.length !== 11) {
+        msgErro.textContent = "Digite um CPF válido com 11 dígitos.";
         msgErro.classList.remove("hidden");
+        cpfLogin.focus();
         return;
       }
 
-      // Adiciona loading no botão
       btnBuscar.disabled = true;
       btnBuscar.classList.add("btn-loading");
       btnBuscar.innerHTML = '<i class="fas fa-search"></i> Buscando...';
 
       try {
-        const resp = await fetch(`${scriptURL}?acao=evento&cpf=${cpf}`);
-        const data = await resp.json();
+        console.log("🔍 Buscando CPF:", cpf);
+        
+        // Busca TODOS os cadastros
+        const resp = await fetch(scriptURL);
+        const responseText = await resp.text();
+        
+        console.log("📨 Resposta bruta:", responseText);
 
-        if (data.erro) {
-          msgErro.textContent = "CPF não encontrado. Clique em 'Cadastre-se' para se registrar.";
-          msgErro.classList.remove("hidden");
+        let data;
+        
+        // Tenta parsear como JSON
+        try {
+          data = JSON.parse(responseText);
+          console.log("📊 Dados parseados (JSON):", data);
+        } catch (jsonError) {
+          console.log("❌ Não é JSON, verificando texto...");
+          // Se não for JSON, verifica se é texto "DUPLICADO" ou "OK"
+          if (responseText === "DUPLICADO") {
+            msgErro.textContent = "CPF já cadastrado! Use a página de cadastro completo.";
+            msgErro.classList.remove("hidden");
+            return;
+          } else if (responseText === "OK") {
+            msgErro.textContent = "CPF não encontrado. Clique em 'Cadastre-se' para se registrar.";
+            msgErro.classList.remove("hidden");
+            return;
+          } else {
+            throw new Error("Resposta em formato não reconhecido");
+          }
+        }
+
+        // Se chegou aqui, data é um array JSON com todos os cadastros
+        if (Array.isArray(data)) {
+          console.log(`🔎 Procurando CPF ${cpf} em ${data.length} cadastros...`);
+          
+          const usuario = data.find(user => {
+            if (!user.CPF) return false;
+            
+            const cpfUser = user.CPF.toString().replace(/\D/g, "");
+            const cpfBuscado = cpf;
+            
+            console.log(`Comparando: ${cpfUser} com ${cpfBuscado}`);
+            
+            return cpfUser === cpfBuscado;
+          });
+
+          if (usuario) {
+            console.log("✅ Usuário encontrado:", usuario);
+            
+            // Preenche os campos - testando diferentes nomes de propriedades
+            document.getElementById("nome").value = usuario.NomeCompleto || usuario.nome || "";
+            document.getElementById("cpf").value = usuario.CPF || usuario.cpf || "";
+            document.getElementById("rg").value = usuario.RG || usuario.rg || "";
+            document.getElementById("telefone").value = usuario.Telefone || usuario.telefone || usuario.whatsapp || "";
+
+            document.getElementById("login").classList.add("hidden");
+            formEvento.classList.remove("hidden");
+            document.getElementById("termoCiencia").focus();
+            
+          } else {
+            console.log("❌ CPF não encontrado na lista");
+            msgErro.textContent = "CPF não encontrado. Clique em 'Cadastre-se' para se registrar.";
+            msgErro.classList.remove("hidden");
+          }
         } else {
-          document.getElementById("nome").value = data.nome || "";
-          document.getElementById("cpf").value = data.cpf || "";
-          document.getElementById("rg").value = data.rg || "";
-          document.getElementById("telefone").value = data.telefone || "";
-
-          document.getElementById("login").classList.add("hidden");
-          formEvento.classList.remove("hidden");
+          console.log("❌ Dados não são um array:", typeof data);
+          msgErro.textContent = "Erro: formato de dados inválido.";
+          msgErro.classList.remove("hidden");
         }
 
       } catch (err) {
-        msgErro.textContent = "Erro ao buscar: " + err.message;
+        console.error("💥 Erro detalhado:", err);
+        msgErro.textContent = "❌ Erro ao buscar: " + err.message;
         msgErro.classList.remove("hidden");
       } finally {
-        // Remove loading independente do resultado
         btnBuscar.disabled = false;
         btnBuscar.classList.remove("btn-loading");
         btnBuscar.innerHTML = '<i class="fas fa-search"></i> Buscar Cadastro';
@@ -678,18 +732,19 @@
         return;
       }
 
-      // Desabilita o botão imediatamente
       btnSubmit.disabled = true;
       btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
 
       const formData = new FormData();
       formData.append("acao", "evento");
       formData.append("evento", eventoNome);
+      formData.append("sheetName", "Evento3");
       formData.append("NomeCompleto", document.getElementById("nome").value || "");
       formData.append("CPF", document.getElementById("cpf").value || "");
       formData.append("RG", document.getElementById("rg").value || "");
       formData.append("Telefone", document.getElementById("telefone").value || "");
       formData.append("Status", termo.checked ? termo.value : "");
+      
       const listaChk = document.getElementById("cienteListaEspera");
       formData.append("CienteListaEspera", (listaChk && listaChk.checked) ? listaChk.value : "Não");
       formData.append("JaConsagrei", consagracao.value);
@@ -699,54 +754,42 @@
         const resp = await fetch(scriptURL, { method: "POST", body: formData });
         const txt = await resp.text();
 
-        // Mensagens mais claras e específicas
-        if (txt && txt.includes("Lista de Espera")) {
-          mensagem.textContent = "🎯 VOCÊ ESTÁ NA LISTA DE ESPERA! Entraremos em contato por WhatsApp se surgir vaga.";
+        // ⬇️⬇️⬇️ VERIFICA BASEADO NA MENSAGEM DO APPS SCRIPT ⬇️⬇️⬇️
+        if (txt && txt.toLowerCase().includes("lista de espera")) {
+          mensagem.textContent = "🎯 INSCRIÇÕES ESGOTADAS VOCÊ ENTROU NA LISTA DE ESPERA!";
         } else {
-          mensagem.textContent = "🎉 INSCRIÇÃO CONFIRMADA! Aguarde nossas instruções por WhatsApp em breve.";
+          mensagem.textContent = "🎉 GRATIDÃO SUA INSCRIÇÃO FOI CONFIRMADA!";
         }
 
         mensagem.className = "mensagem sucesso";
         mensagem.classList.remove("hidden");
-
-        // Mantém o botão desabilitado com texto alterado
         btnSubmit.innerHTML = '<i class="fas fa-check"></i> Inscrição Enviada';
         btnNovaInscricao.classList.remove("hidden");
 
-        // Limpa apenas os campos do formulário (mantém dados pessoais)
-        document.getElementById("termoCiencia").checked = false;
-        if (listaChk) listaChk.checked = false;
-        const radios = document.querySelectorAll('input[name="JaConsagrei"]');
-        radios.forEach(radio => radio.checked = false);
-        
       } catch (err) {
-        // Reabilita o botão em caso de erro
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Confirmar Inscrição';
-        
-        mensagem.textContent = "❌ Erro: " + err.message;
+        mensagem.textContent = "❌ Erro ao enviar: " + err.message;
         mensagem.className = "mensagem erro";
         mensagem.classList.remove("hidden");
       }
     });
 
-    // Botão para nova inscrição
     btnNovaInscricao.addEventListener("click", () => {
-      // Limpa o CPF do login e volta para o início
       cpfLogin.value = "";
       formEvento.classList.add("hidden");
       btnNovaInscricao.classList.add("hidden");
       document.getElementById("login").classList.remove("hidden");
-      
-      // Reseta o botão de submit
       btnSubmit.disabled = false;
       btnSubmit.innerHTML = '<i class="fas fa-paper-plane"></i> Confirmar Inscrição';
-      
-      // Limpa mensagens
       mensagem.classList.add("hidden");
       msgErro.classList.add("hidden");
+      cpfLogin.focus();
+    });
+
+    window.addEventListener('load', () => {
+      cpfLogin.focus();
     });
   </script>
 </body>
-
 </html>
