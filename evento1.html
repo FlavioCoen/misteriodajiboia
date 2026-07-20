@@ -581,17 +581,17 @@
           <div class="radio-group">
             <label class="radio-option">
               <input type="radio" id="jaConsagrei" name="JaConsagrei" value="Sim" required />
-              <span>Já consagrei a medicina da Ayahuasca (R$60,00)</span>
+              <span>Já consagrei a medicina da Ayahuasca</span>
             </label>
             <label class="radio-option">
               <input type="radio" id="primeiraVez" name="JaConsagrei" value="Não" required />
-              <span>Minha primeira vez consagrando (Gratuito)</span>
+              <span>Minha primeira vez consagrando</span>
             </label>
           </div>
         </div>
 
         <p style="text-align: center; margin: 20px 0; color: var(--text-light);">
-          (Verifique a mensagem abaixo com o status de Inscrição abaixo)
+          (Verifique a mensagem abaixo com o status de Inscrição)
         </p>
 
         <button type="submit" id="btnSubmit" class="btn btn-primary">
@@ -770,11 +770,12 @@
         // ⬇️⬇️⬇️ VERIFICA BASEADO NA MENSAGEM DO APPS SCRIPT ⬇️⬇️⬇️
         if (txt && txt.toLowerCase().includes("lista de espera")) {
           mensagem.textContent = "🎯 INSCRIÇÕES ESGOTADAS VOCÊ ENTROU NA LISTA DE ESPERA!";
+          mensagem.className = "mensagem sucesso";
         } else {
-          mensagem.textContent = "🎉 GRATIDÃO SUA INSCRIÇÃO FOI CONFIRMADA!";
+          mensagem.textContent = "🎉 GRATIDÃO! SUA INSCRIÇÃO FOI CONFIRMADA!\n\nRealize o pagamento de R$80,00 antecipado para garantir sua vaga e não esqueça de encaminhar o comprovante.";
+          mensagem.className = "mensagem sucesso";
         }
 
-        mensagem.className = "mensagem sucesso";
         mensagem.classList.remove("hidden");
         btnSubmit.innerHTML = '<i class="fas fa-check"></i> Inscrição Enviada';
         btnNovaInscricao.classList.remove("hidden");
